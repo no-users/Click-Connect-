@@ -1,0 +1,2462 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Click &amp; Continue</title>
+  <link rel="icon" type="image/svg+xml" href="brand/app-icon.svg">
+  <link rel="stylesheet" href="">
+  <style>
+
+/* ============================================================
+   DIGITAL SAATHI — "OFFICIAL RECORD" DESIGN SYSTEM  (v2 · Premium)
+   A light, airy sky-blue & gold palette with soft depth and
+   smooth, purposeful motion throughout. Reorganised so every
+   feature added over time lives in one clean, numbered system
+   instead of scattered one-off rules.
+
+   TABLE OF CONTENTS
+   0.  Design tokens (root variables + dark theme)
+   1.  Animation library (keyframes used everywhere below)
+   2.  Base / reset
+   3.  Header (brand bar + subheader)
+   4.  Navigation bar & tabs
+   5.  Tab-content transition
+   6.  Form grid, labels, inputs
+   7.  Section headings & radio pills
+   8.  Buttons & scrollbar
+   9.  Saved-list & profile cards (avatar / serial / ID pill)
+   10. Documents tab (upload, review table, toasts)
+   11. Landing screen (first-open overlay)
+   12. Premium features — batch 1 (search, validation, dashboard…)
+   13. Premium features — batch 3 (camera, language, tutorial…)
+   14. Profile tools panel (consolidated drawer)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   0. DESIGN TOKENS
+   ------------------------------------------------------------ */
+:root {
+  /* Surfaces */
+  --bg-app: #eef5fc;                 /* soft sky-blue white */
+  --bg-app-2: #e4f0fb;               /* second stop for the app gradient */
+  --card-bg: #ffffff;
+  --card-bg-soft: #f8fbfe;
+  --input-bg: #f4f8fd;
+  --input-focus: #ffffff;
+
+  /* Ink */
+  --text-primary: #1e293b;
+  --text-muted: #64748b;
+
+  /* Lines */
+  --border-color: #dbe4f0;
+
+  /* Brand */
+  --accent-navy: #2f6fb8;
+  --accent-navy-2: #4a91d6;
+  --accent-gold: #d9a43e;
+  --accent-gold-light: #eabd6a;
+  --accent-gradient: linear-gradient(135deg, #e2b158 0%, #c28d29 100%);
+  --accent-navy-gradient: linear-gradient(135deg, #5b9de0 0%, #2f6fb8 100%);
+  --accent-glow: rgba(47, 111, 184, 0.16);
+  --gold-glow: rgba(217, 164, 78, 0.28);
+
+  /* Status */
+  --success: #4f7a52;
+  --success-light: #eaf5eb;
+  --danger: #d9534f;
+  --danger-light: #e3726e;
+
+  /* Elevation — layered, soft, "premium" shadows instead of flat ones */
+  --shadow-xs: 0 1px 2px rgba(30, 41, 59, 0.06);
+  --shadow-sm: 0 4px 10px -4px rgba(30, 41, 59, 0.10);
+  --shadow-card: 0 10px 28px -10px rgba(47, 111, 184, 0.22), 0 2px 8px -2px rgba(30, 41, 59, 0.06);
+  --shadow-lift: 0 16px 34px -12px rgba(47, 111, 184, 0.30), 0 4px 10px -2px rgba(30, 41, 59, 0.08);
+  --shadow-gold: 0 8px 20px -6px var(--gold-glow);
+
+  /* Shape */
+  --radius-sm: 6px;
+  --radius-md: 9px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* Motion — one consistent easing system used everywhere */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 0.15s;
+  --dur-base: 0.25s;
+  --dur-slow: 0.45s;
+}
+
+.dark-theme {
+  --bg-app: #0e1320;
+  --bg-app-2: #121a2c;
+  --card-bg: #161d2e;
+  --card-bg-soft: #131b2c;
+  --input-bg: #10182a;
+  --input-focus: #131b2e;
+  --text-primary: #f2ede1;
+  --text-muted: #98917f;
+  --border-color: #2a3348;
+  --accent-navy: #3a4d78;
+  --accent-navy-2: #4f6597;
+  --accent-gold: #d9a44e;
+  --accent-gold-light: #eab766;
+  --accent-gradient: linear-gradient(135deg, #d9a44e 0%, #b9832f 100%);
+  --accent-navy-gradient: linear-gradient(135deg, #3a4d78 0%, #22314f 100%);
+  --accent-glow: rgba(58, 77, 120, 0.35);
+  --gold-glow: rgba(217, 164, 78, 0.22);
+  --success: #6faa73;
+  --success-light: rgba(111, 170, 115, 0.14);
+  --danger: #c25a34;
+  --danger-light: #d97449;
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 4px 10px -4px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-lift: 0 18px 36px rgba(0, 0, 0, 0.5);
+  --shadow-gold: 0 8px 20px -6px rgba(217, 164, 78, 0.25);
+}
+
+/* ------------------------------------------------------------
+   1. ANIMATION LIBRARY
+   Reused across every section below — one small vocabulary of
+   motion so the whole app feels like a single, considered product.
+   ------------------------------------------------------------ */
+@keyframes saathiFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes saathiFadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes saathiFadeDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes saathiScaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes saathiPopIn {
+  0%   { opacity: 0; transform: scale(0.85); }
+  60%  { opacity: 1; transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+@keyframes saathiToastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(16px) scale(0.96); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+@keyframes saathiShimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes saathiPulseRing {
+  0%   { box-shadow: 0 0 0 0 var(--gold-glow); }
+  70%  { box-shadow: 0 0 0 8px rgba(217, 164, 78, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(217, 164, 78, 0); }
+}
+@keyframes saathiGrowUp {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+@keyframes saathiFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+
+/* Respect users who've asked the OS to reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   2. BASE / RESET
+   ------------------------------------------------------------ */
+* { box-sizing: border-box; }
+
+html {
+  background: var(--bg-app);
+  min-height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 605px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  color: var(--text-primary);
+  /* Soft directional gradient instead of a flat fill — reads as
+     considerably more "premium" while staying just as light. */
+  background: radial-gradient(120% 140% at 15% 0%, var(--bg-app-2) 0%, var(--bg-app) 55%);
+  animation: saathiFadeIn var(--dur-slow) var(--ease-soft);
+}
+
+::selection { background: var(--gold-glow); color: var(--text-primary); }
+
+/* ------------------------------------------------------------
+   3. HEADER
+   ------------------------------------------------------------ */
+body > h2 {
+  text-align: center !important;
+  font-size: 13px !important;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #ffffff !important;
+  width: 100%;
+  height: 33px;
+  margin: 0;
+  padding: 0 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 102;
+  background: var(--accent-navy-gradient) !important;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, #9B00D2, #FE28AF, #DD603E) 1;
+  box-sizing: border-box;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  overflow: hidden;
+  animation: saathiFadeDown var(--dur-base) var(--ease-out);
+}
+
+.saathi-header-logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px -2px rgba(254, 40, 175, 0.65);
+  animation: saathiFloat 3.2s ease-in-out infinite;
+}
+
+.saathi-brand {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  line-height: 1;
+}
+
+/* brand gradient (same stops as the logo wordmark, lightened to read on the navy bar) */
+.saathi-brand-accent {
+  background: linear-gradient(90deg, #D66BFF 0%, #FF5CC8 55%, #FF9B6B 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent !important;
+}
+
+.saathi-divider {
+  color: var(--accent-gold);
+  opacity: 0.7;
+  font-size: 9px;
+  line-height: 1;
+}
+
+.saathi-tagline {
+  font-size: 9.5px !important;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75) !important;
+  line-height: 1;
+}
+
+body > h3 {
+  text-align: center !important;
+  font-size: 10px !important;
+  font-weight: 500;
+  color: var(--text-muted) !important;
+  width: 100%;
+  height: 25px;
+  margin: 0;
+  padding: 0 10px;
+  position: fixed;
+  top: 33px;
+  left: 0;
+  z-index: 101;
+  background: var(--card-bg) !important;
+  border-bottom: 1px solid var(--border-color);
+  box-sizing: border-box;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  overflow: hidden;
+  animation: saathiFadeDown var(--dur-base) var(--ease-out) 0.05s both;
+}
+
+.saathi-h3-icon {
+  font-size: 10px;
+  line-height: 1;
+  filter: saturate(1.3);
+}
+
+body > h3 a {
+  color: #ffffff !important;
+  font-weight: 700;
+  text-decoration: none;
+  background: var(--accent-gradient);
+  padding: 2px 9px;
+  border-radius: var(--radius-pill);
+  font-size: 9.5px;
+  line-height: 1.4;
+  margin: 0 2px;
+  box-shadow: var(--shadow-gold);
+  transition: transform var(--dur-fast) var(--ease-out), filter var(--dur-fast) var(--ease-out);
+  display: inline-block;
+  white-space: nowrap;
+}
+
+body > h3 a:hover {
+  text-decoration: none;
+  transform: translateY(-1px) scale(1.03);
+  filter: brightness(1.08);
+}
+body > h3 a:active { transform: translateY(0) scale(0.98); }
+
+/* ------------------------------------------------------------
+   4. NAVIGATION BAR & TABS
+   ------------------------------------------------------------ */
+.nav-bar-wrapper {
+  width: 100%;
+  position: fixed;
+  top: 58px;
+  left: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  padding: 0 10px;
+  animation: saathiFadeDown var(--dur-base) var(--ease-out) 0.1s both;
+}
+
+.nav-bar {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--card-bg);
+  /* Faint glass effect on the bar that floats over the app */
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), var(--card-bg));
+  backdrop-filter: blur(6px);
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+}
+
+.nav-tabs-group,
+.nav-actions-group {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.nav-bar button {
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 0 14px;
+  font-weight: 600;
+  font-size: 11.5px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: color var(--dur-fast) var(--ease-soft), background var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-soft);
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+  background: var(--input-bg);
+}
+.tab-btn:active { transform: scale(0.96); }
+
+.tab-btn.active {
+  color: #ffffff;
+  background: var(--accent-navy-gradient);
+  box-shadow: 0 4px 12px -4px var(--accent-glow);
+  animation: saathiScaleIn var(--dur-fast) var(--ease-out);
+}
+
+.theme-toggle-btn {
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: border-color var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-soft);
+}
+
+.theme-toggle-btn:hover { border-color: var(--accent-gold); transform: rotate(-6deg); }
+.theme-toggle-btn:active { transform: rotate(0deg) scale(0.94); }
+
+.add-record-btn {
+  background: var(--accent-gradient);
+  color: #ffffff;
+  border: none;
+  padding: 0 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: var(--shadow-gold);
+  transition: transform var(--dur-fast) var(--ease-out), filter var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.add-record-btn:hover { transform: translateY(-1px); filter: brightness(1.08); box-shadow: 0 10px 22px -6px var(--gold-glow); }
+.add-record-btn:active { transform: translateY(0) scale(0.97); }
+
+/* ------------------------------------------------------------
+   5. TAB-CONTENT TRANSITION
+   Toggling an element from display:none to visible restarts its
+   CSS animation, so every tab switch gets a gentle rise-and-fade
+   with zero JS changes needed.
+   ------------------------------------------------------------ */
+#content-form,
+#content-saved,
+#content-docs {
+  animation: saathiFadeUp var(--dur-base) var(--ease-out);
+}
+
+/* ------------------------------------------------------------
+   6. FORM GRID, LABELS, INPUTS
+   ------------------------------------------------------------ */
+#tab-contents {
+  margin-top: 112px !important;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 10px 10px 10px;
+}
+
+.form-group {
+  margin-bottom: 2px !important;
+}
+
+.form-wide {
+  grid-column: 1 / -1 !important;
+}
+
+.form-wide .radio-group {
+  gap: 22px;
+}
+
+label {
+  display: block;
+  margin-bottom: 4px !important;
+  font-size: 10.5px !important;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.2px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 7px 10px !important;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md) !important;
+  font-size: 11.5px !important;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  box-sizing: border-box;
+  transition: border-color var(--dur-base) var(--ease-soft), background var(--dur-base) var(--ease-soft), box-shadow var(--dur-base) var(--ease-soft);
+}
+
+input::placeholder { color: var(--text-muted); opacity: 0.8; }
+
+input:focus, select:focus {
+  border-color: var(--accent-gold);
+  background: var(--input-focus);
+  box-shadow: 0 0 0 3px var(--gold-glow);
+  outline: none;
+}
+
+/* ------------------------------------------------------------
+   7. SECTION HEADINGS & RADIO PILLS
+   ------------------------------------------------------------ */
+.form-group[style*="grid-column: span 3"] {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  margin-top: 10px !important;
+  margin-bottom: 4px !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.form-group[style*="grid-column: span 3"] h3,
+.form-container h3 {
+  margin: 0 !important;
+  font-size: 11.5px !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  text-align: left !important;
+  background: var(--accent-navy-gradient) !important;
+  padding: 8px 12px !important;
+  border-radius: var(--radius-md) !important;
+  border-left: 4px solid var(--accent-gold);
+  position: static !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px -4px var(--accent-glow);
+}
+
+.radio-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.radio-group input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.radio-group label {
+  font-weight: 600;
+  font-size: 10.5px !important;
+  color: var(--text-muted);
+  margin-bottom: 0 !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--border-color);
+  background: var(--input-bg);
+  transition: all var(--dur-fast) var(--ease-soft);
+}
+
+.radio-group label:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-1px);
+}
+
+.radio-group input[type="radio"]:checked + label {
+  background: var(--accent-gradient) !important;
+  color: #ffffff !important;
+  border-color: transparent;
+  box-shadow: var(--shadow-gold);
+  animation: saathiPopIn var(--dur-fast) var(--ease-out);
+}
+
+.radio-group input[type="radio"]:focus-visible + label {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.form-group:has(.radio-group) {
+  grid-column: span 1;
+}
+
+input[type="file"] {
+  width: 100%;
+  padding: 4px;
+  font-size: 10px;
+  border: 1.5px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--input-bg);
+  color: var(--text-muted);
+  box-sizing: border-box;
+  transition: border-color var(--dur-fast) var(--ease-soft);
+}
+input[type="file"]:hover { border-color: var(--accent-gold); }
+
+#imagePreview {
+  max-width: 92px;
+  max-height: 92px;
+  border-radius: var(--radius-md);
+  border: 2px dashed var(--accent-gold);
+  display: none;
+  object-fit: cover;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+#imagePreview[src]:not([src=""]) { animation: saathiScaleIn var(--dur-base) var(--ease-out); }
+
+/* ------------------------------------------------------------
+   8. BUTTONS & SCROLLBAR
+   ------------------------------------------------------------ */
+button { font-family: inherit; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 18px;
+  border-radius: var(--radius-md) !important;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  font-size: 11.5px;
+  font-weight: 700;
+  box-shadow: var(--shadow-xs);
+  transition: transform var(--dur-fast) var(--ease-out), filter var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.btn-primary {
+  background: var(--accent-gradient);
+  color: #ffffff;
+}
+
+.btn-danger {
+  background: transparent;
+  border-color: var(--danger);
+  color: var(--danger);
+  box-shadow: none;
+}
+
+.btn-danger:hover {
+  background: var(--danger);
+  color: #ffffff;
+}
+
+.btn:hover {
+  transform: translateY(-1.5px);
+  filter: brightness(1.08);
+  box-shadow: var(--shadow-sm);
+}
+.btn:active { transform: translateY(0) scale(0.97); }
+
+.form-actions {
+  grid-column: 1 / -1 !important;
+  display: flex !important;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px !important;
+  padding-top: 10px !important;
+  border-top: 1px dashed var(--border-color);
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; transition: background var(--dur-fast) var(--ease-soft); }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-gold); }
+
+/* ------------------------------------------------------------
+   9. SAVED-LIST & PROFILE CARDS
+   ------------------------------------------------------------ */
+.form-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 12px 14px !important;
+  width: 100%;
+  max-width: 585px;
+  margin: 0 auto;
+  height: 550px !important;
+  max-height: 550px !important;
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+  box-sizing: border-box;
+}
+
+#savedList {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  width: 100%;
+  max-width: 585px;
+  margin: 0 auto;
+  height: 445px !important;
+  max-height: 445px !important;
+  overflow-y: auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+#savedList > div {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 14px 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px;
+  box-shadow: var(--shadow-sm) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+  animation: saathiFadeUp var(--dur-base) var(--ease-out) both;
+}
+
+/* Gentle stagger for the first several cards so the list feels
+   like it "arrives" rather than just appearing. */
+#savedList > div:nth-child(1) { animation-delay: 0.02s; }
+#savedList > div:nth-child(2) { animation-delay: 0.06s; }
+#savedList > div:nth-child(3) { animation-delay: 0.10s; }
+#savedList > div:nth-child(4) { animation-delay: 0.14s; }
+#savedList > div:nth-child(5) { animation-delay: 0.18s; }
+#savedList > div:nth-child(n+6) { animation-delay: 0.20s; }
+
+#savedList > div:hover {
+  border-color: var(--accent-gold) !important;
+  box-shadow: var(--shadow-lift) !important;
+  transform: translateY(-2px);
+}
+
+#savedList > div div {
+  color: black !important;
+  font-size: 12px !important;
+  line-height: 1.6;
+}
+
+#savedList h2 {
+  font-size: 15px !important;
+  margin: 0 !important;
+  color: var(--text-primary) !important;
+  font-weight: 700 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#savedList > div > div:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  border-left: 3px solid var(--accent-gold);
+  padding-left: 10px;
+}
+
+#savedList > div > button { flex-shrink: 0; }
+
+#savedList > div button,
+#savedList > div .btn {
+  height: 28px;
+  padding: 0 14px !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  transition: transform var(--dur-fast) var(--ease-out), filter var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out) !important;
+  border: none !important;
+  box-shadow: var(--shadow-xs);
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  margin: 0 !important;
+  flex-shrink: 0;
+}
+
+#savedList > div button:nth-last-child(3) { background: var(--accent-navy) !important; color: #ffffff !important; }
+#savedList > div button:nth-last-child(2) { background: var(--success) !important; color: #ffffff !important; }
+#savedList > div button:last-child { background: var(--danger) !important; color: #ffffff !important; }
+
+#savedList > div button:hover { filter: brightness(1.12); transform: translateY(-1.5px); box-shadow: var(--shadow-sm); }
+#savedList > div button:active { transform: translateY(0) scale(0.95); }
+
+#noSaved {
+  text-align: center;
+  padding: 30px;
+  font-size: 13px !important;
+  color: var(--text-muted) !important;
+  background: transparent;
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border-color);
+  margin-top: 20px;
+  animation: saathiFadeIn var(--dur-slow) var(--ease-soft);
+}
+
+#savedList > div > div:not(:first-child) { display: none !important; }
+
+/* --- Profile card: avatar + serial badge + ID pill --- */
+#savedList > div > div.saathi-info-enhanced {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap;
+  gap: 14px;
+  border-left: none !important;
+  padding-left: 0 !important;
+}
+
+#savedList > div > div.saathi-info-enhanced > button:first-of-type { margin-left: 6px !important; }
+
+.saathi-btn-load { background: var(--accent-navy) !important; color: #ffffff !important; }
+.saathi-btn-update { background: var(--success) !important; color: #ffffff !important; }
+.saathi-btn-delete { background: var(--danger) !important; color: #ffffff !important; }
+
+.saathi-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+#savedList > div:hover .saathi-avatar-wrap { transform: scale(1.05) rotate(-2deg); }
+
+.saathi-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 15px !important;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 12px -2px rgba(28, 34, 51, 0.3);
+  border: 2px solid var(--card-bg);
+  transition: box-shadow var(--dur-base) var(--ease-out);
+}
+/* Gold glow ring on hover — small touch that makes each customer card feel tappable/alive */
+#savedList > div:hover .saathi-avatar {
+  box-shadow: 0 4px 12px -2px rgba(28, 34, 51, 0.3), 0 0 0 4px var(--gold-glow);
+}
+
+.saathi-serial {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: white;
+  color: var(--accent-navy, #1c2b4a) !important;
+  font-size: 9.5px !important;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--card-bg);
+  z-index: 1;
+}
+
+.saathi-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.saathi-meta h2 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.saathi-userid {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  padding: 2px 9px !important;
+  border-radius: var(--radius-pill);
+  background: var(--input-bg) !important;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted) !important;
+  font-size: 10.5px !important;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  line-height: 1.6 !important;
+}
+
+.saathi-userid-empty { font-style: italic; opacity: 0.75; }
+
+/* ------------------------------------------------------------
+   10. DOCUMENTS TAB — upload / OCR review UI
+   ------------------------------------------------------------ */
+.docs-panel {
+  width: 100%;
+  max-width: 585px;
+  margin: 0 auto;
+  height: 550px;
+  max-height: 550px;
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+  box-sizing: border-box;
+}
+
+.docs-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.doc-file-list {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.doc-file-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  padding: 6px 10px;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: transform var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  animation: saathiFadeUp var(--dur-fast) var(--ease-out) both;
+}
+.doc-file-row:hover { border-color: var(--accent-gold); transform: translateX(2px); }
+
+.doc-file-status { color: var(--accent-gold); font-weight: 600; }
+
+.doc-review-container { margin-top: 14px; animation: saathiFadeUp var(--dur-base) var(--ease-out); }
+
+.doc-review-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+
+.doc-review-table th, .doc-review-table td {
+  border: 1px solid var(--border-color);
+  padding: 6px 8px;
+  text-align: left;
+}
+
+.doc-review-table th { background: var(--input-bg); }
+.doc-review-table tr { transition: background var(--dur-fast) var(--ease-soft); }
+.doc-review-table tbody tr:hover { background: var(--card-bg-soft); }
+
+.doc-review-input {
+  width: 100%;
+  padding: 4px 6px !important;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 11px !important;
+  background: var(--input-focus);
+  color: var(--text-primary);
+  transition: border-color var(--dur-fast) var(--ease-soft), box-shadow var(--dur-fast) var(--ease-soft);
+}
+.doc-review-input:focus { outline: none; border-color: var(--accent-gold); box-shadow: 0 0 0 2px var(--gold-glow); }
+
+.doc-review-source { color: var(--text-muted); font-size: 10px; }
+
+.doc-review-conflict-row { background: rgba(217, 164, 78, 0.12); animation: saathiPulseRing 2s ease-out 1; }
+.doc-conflict-flag { font-size: 10px; }
+select.doc-review-conflict {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid var(--accent-gold);
+  border-radius: 4px;
+  font-size: 10.5px;
+  background: var(--input-focus);
+  color: var(--text-primary);
+}
+
+.doc-rawtext-list { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+.doc-rawtext-item {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 4px 8px;
+  background: var(--input-bg);
+  transition: border-color var(--dur-fast) var(--ease-soft);
+}
+.doc-rawtext-item:hover { border-color: var(--accent-navy-2); }
+.doc-rawtext-item summary { font-size: 10px; color: var(--text-muted); cursor: pointer; }
+.doc-rawtext-item pre {
+  font-size: 9.5px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 120px;
+  overflow-y: auto;
+  margin: 6px 0 2px;
+  color: var(--text-primary);
+  animation: saathiFadeIn var(--dur-fast) var(--ease-soft);
+}
+
+.doc-dropzone {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 18px 10px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--dur-base) var(--ease-soft);
+  background: var(--input-bg);
+}
+
+.doc-dropzone:hover,
+.doc-dropzone-active,
+.doc-dropzone.dragging {
+  border-color: var(--accent-gold);
+  background: var(--input-focus);
+  color: var(--text-primary);
+  transform: scale(1.01);
+  box-shadow: var(--shadow-gold);
+}
+
+.doc-file-remove {
+  border: none;
+  background: transparent;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-soft);
+}
+.doc-file-remove:hover { background: var(--danger); color: #ffffff !important; transform: rotate(90deg); }
+
+.saathi-doc-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 16px;
+  height: 17px;
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  transition: background var(--dur-fast) var(--ease-soft), border-color var(--dur-fast) var(--ease-soft),
+              color var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-out);
+  animation: saathiPopIn var(--dur-fast) var(--ease-out);
+}
+/* Gold/navy "premium" state once a customer actually has documents on file */
+.saathi-doc-badge-active {
+  background: var(--accent-navy-gradient);
+  border-color: var(--accent-gold);
+  color: #fff;
+  box-shadow: 0 2px 6px -1px rgba(28, 34, 51, 0.35);
+}
+#savedList > div:hover .saathi-doc-badge-active { animation: saathiPulseRing var(--dur-slow) var(--ease-out); }
+
+.saathi-doc-group {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-color);
+}
+
+.saathi-quick-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.saathi-copy-picker {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 10.5px;
+  padding: 4px 8px;
+}
+
+/* Toast notifications — replaces alert() popups. Applies to the
+   main toast AND the Undo-delete toast, which share the same markup. */
+.saathi-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%) translateY(20px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: var(--radius-pill);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--accent-navy);
+  box-shadow: 0 10px 26px -6px rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+  z-index: 999;
+  max-width: 90%;
+  text-align: center;
+}
+.saathi-toast-icon { font-size: 13px; flex-shrink: 0; }
+.saathi-toast-text { flex: 1; text-align: left; }
+
+.saathi-toast-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  animation: saathiToastIn var(--dur-base) var(--ease-out);
+}
+
+.saathi-toast-success { background: var(--success); }
+.saathi-toast-warn { background: var(--accent-gold); color: #1c2233; }
+.saathi-toast-info { background: var(--accent-navy); }
+.saathi-toast-action {
+  margin-left: 10px;
+  border: none;
+  background: rgba(255,255,255,0.25);
+  color: inherit;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 10.5px;
+  transition: background var(--dur-fast) var(--ease-soft);
+}
+.saathi-toast-action:hover { background: rgba(255,255,255,0.4); }
+
+.saathi-aadhaar-warn {
+  background: #fdeaea;
+  border: 1px solid var(--danger);
+  color: #8a1f1f;
+  font-size: 10.5px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  animation: saathiFadeUp var(--dur-base) var(--ease-out);
+}
+
+#saathiExtraActionsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+  grid-column: 1 / -1;
+}
+#saathiExtraActionsRow .saathi-extra-action-btn {
+  flex: 1 1 calc(50% - 4px);
+  min-width: 120px;
+  height: 36px;
+  font-size: 10.5px !important;
+  padding: 0 8px !important;
+  margin: 0 !important;
+  border-radius: 8px !important;
+}
+
+#saathiBackupToolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+#saathiBackupToolbar .btn { height: 30px; padding: 0 14px; font-size: 10.5px; }
+
+/* ------------------------------------------------------------
+   11. LANDING SCREEN
+   ------------------------------------------------------------ */
+body.saathi-landing-active > h2,
+body.saathi-landing-active > h3,
+body.saathi-landing-active > .nav-bar-wrapper,
+body.saathi-landing-active > #tab-contents {
+  display: none !important;
+}
+
+body.saathi-landing-active { width: 330px !important; }
+
+#saathiLandingOverlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 24px 20px;
+  box-sizing: border-box;
+  width: 100%;
+  background: radial-gradient(120% 130% at 50% -10%, var(--bg-app-2) 0%, var(--bg-app) 60%);
+  animation: saathiFadeUp var(--dur-slow) var(--ease-out);
+}
+
+.landing-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  box-shadow: 0 10px 26px -6px rgba(254, 40, 175, 0.55);
+  animation: saathiPopIn var(--dur-slow) var(--ease-out);
+}
+
+.landing-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  text-align: center;
+}
+
+.landing-header-brand {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: 0.3px;
+}
+
+.landing-header-accent {
+  background: linear-gradient(90deg, #9B00D2, #FE28AF 60%, #DD603E);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent !important;
+}
+
+.landing-header-tagline {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.landing-card {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 16px;
+  box-sizing: border-box;
+  animation: saathiFadeUp var(--dur-slow) var(--ease-out) 0.08s both;
+}
+
+.landing-label { font-size: 11px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+
+.landing-select {
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-color);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 11.5px;
+  box-sizing: border-box;
+  margin-bottom: 4px;
+  transition: border-color var(--dur-fast) var(--ease-soft);
+}
+.landing-select:focus { outline: none; border-color: var(--accent-gold); }
+
+.landing-empty {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 5px 0 10px;
+  display: none;
+}
+
+.landing-fill-btn {
+  width: 100%;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 11px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--accent-navy-gradient);
+  cursor: pointer;
+  box-shadow: 0 8px 20px -6px var(--accent-glow);
+  transition: transform var(--dur-fast) var(--ease-out), filter var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.landing-fill-btn:hover { transform: translateY(-1.5px); filter: brightness(1.06); box-shadow: 0 12px 26px -6px var(--accent-glow); }
+.landing-fill-btn:active { transform: translateY(0) scale(0.98); }
+
+#landingCreateBtn {
+  width: 100%;
+  border: 1.5px dashed var(--border-color);
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: var(--radius-md);
+  padding: 9px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-soft);
+}
+#landingCreateBtn:hover { border-color: var(--accent-gold); color: var(--accent-gold); background: var(--gold-glow); }
+
+/* ------------------------------------------------------------
+   12. PREMIUM FEATURES — BATCH 1
+   Search, live validation, dashboard, PIN gate, favourites…
+   ------------------------------------------------------------ */
+.saathi-search-box {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-color);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 11.5px;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+  transition: border-color var(--dur-fast) var(--ease-soft), box-shadow var(--dur-fast) var(--ease-soft);
+}
+.saathi-search-box:focus { outline: none; border-color: var(--accent-gold); box-shadow: 0 0 0 3px var(--gold-glow); }
+
+.saathi-field-invalid { border-color: var(--danger) !important; background: rgba(217, 83, 79, 0.06) !important; }
+.saathi-field-hint {
+  color: var(--danger);
+  font-size: 9.5px;
+  margin-top: 2px;
+  font-weight: 600;
+  animation: saathiFadeIn var(--dur-fast) var(--ease-soft);
+}
+
+#saathiCounterBadge {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-pill);
+  padding: 5px 12px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+#saathiPinGate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  background: radial-gradient(120% 130% at 50% -10%, var(--bg-app-2) 0%, var(--bg-app) 60%);
+  padding: 24px;
+  box-sizing: border-box;
+  width: 100%;
+  animation: saathiFadeUp var(--dur-slow) var(--ease-out);
+}
+#saathiPinInput {
+  letter-spacing: 6px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.saathi-pin-setting-btn {
+  width: 100%;
+  border: 1px dashed var(--border-color);
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: var(--radius-md);
+  padding: 7px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: all var(--dur-fast) var(--ease-soft);
+}
+.saathi-pin-setting-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+.saathi-fav-star {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px;
+  opacity: 0.6;
+  transition: opacity var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-out);
+}
+.saathi-fav-star:hover { opacity: 1; transform: scale(1.2) rotate(-8deg); }
+.saathi-fav-active { opacity: 1; animation: saathiPopIn var(--dur-fast) var(--ease-out); }
+
+#saathiDashboard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  animation: saathiFadeUp var(--dur-base) var(--ease-out);
+}
+.saathi-dash-title { font-size: 10.5px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.saathi-dash-bars { display: flex; align-items: flex-end; gap: 6px; height: 48px; }
+.saathi-dash-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.saathi-dash-bar {
+  width: 100%;
+  max-width: 18px;
+  background: var(--accent-navy-gradient);
+  border-radius: 3px 3px 0 0;
+  transform-origin: bottom;
+  /* Bars grow smoothly whenever JS updates their inline height. */
+  transition: height 0.6s var(--ease-out);
+  animation: saathiGrowUp 0.6s var(--ease-out);
+}
+.saathi-dash-label { font-size: 8px; color: var(--text-muted); margin-top: 3px; }
+
+.saathi-bulk-check { margin-right: 8px; width: 15px; height: 15px; flex-shrink: 0; }
+
+/* ------------------------------------------------------------
+   13. PREMIUM FEATURES — BATCH 3
+   Camera capture, rotate, language/contrast, onboarding tip…
+   ------------------------------------------------------------ */
+#saathiCameraOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: saathiFadeIn var(--dur-fast) var(--ease-soft);
+}
+#saathiCamVideo { width: 100%; max-height: 80%; object-fit: contain; }
+.saathi-cam-actions { display: flex; gap: 10px; padding: 14px; }
+
+.doc-file-rotate {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 2px;
+  transition: background var(--dur-fast) var(--ease-soft), transform var(--dur-base) var(--ease-out);
+}
+.doc-file-rotate:hover { background: var(--input-focus); color: var(--accent-navy); transform: rotate(90deg); }
+
+.landing-icon-row { display: flex; gap: 8px; margin-top: 6px; }
+.saathi-lang-btn {
+  border: 1.5px solid var(--border-color);
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-soft);
+}
+.saathi-lang-icon { font-size: 12px; }
+.saathi-lang-text { font-size: 9px; font-weight: 700; color: var(--text-muted); }
+.saathi-lang-btn:hover { border-color: var(--accent-gold); transform: translateY(-1px); }
+
+#saathiTutorialTip {
+  background: var(--card-bg);
+  border: 1.5px solid var(--accent-gold);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  font-size: 10.5px;
+  color: var(--text-primary);
+  line-height: 1.5;
+  margin: 0 0 14px;
+  width: 100%;
+  max-width: 330px;
+  box-sizing: border-box;
+  box-shadow: var(--shadow-card);
+  animation: saathiFadeUp var(--dur-base) var(--ease-out);
+}
+#saathiTutorialTip button {
+  display: block;
+  margin: 8px 0 0 auto;
+  border: none;
+  background: var(--accent-gradient);
+  color: #1c2233;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 16px;
+  font-size: 10px;
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-out), filter var(--dur-fast) var(--ease-out);
+}
+#saathiTutorialTip button:hover { transform: translateY(-1px); filter: brightness(1.06); }
+
+body.saathi-high-contrast { --text-muted: #1e293b; --border-color: #1e293b; }
+body.saathi-high-contrast .landing-card,
+body.saathi-high-contrast #quickProfilePanel,
+body.saathi-high-contrast .doc-file-row { border-width: 2px !important; }
+body.saathi-high-contrast .landing-fill-btn,
+body.saathi-high-contrast .saathi-tool-btn { outline: 2px solid #000; }
+
+#saathiEncryptedRow { display: flex; gap: 8px; margin-bottom: 12px; }
+#saathiEncryptedRow .saathi-pin-setting-btn { margin-bottom: 0; }
+
+/* ------------------------------------------------------------
+   14. PROFILE TOOLS PANEL — consolidated, organised drawer
+   ------------------------------------------------------------ */
+#saathiToolsHeader { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+#saathiToolsHeader #saathiCounterBadge,
+#saathiToolsHeader #saathiSearchInput,
+#saathiToolsHeader #saathiDashboard { margin-bottom: 0; }
+
+#saathiToolsDrawer {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: box-shadow var(--dur-base) var(--ease-soft);
+}
+#saathiToolsDrawer[open] { box-shadow: var(--shadow-sm); }
+#saathiToolsDrawer summary {
+  cursor: pointer;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-primary);
+  list-style: none;
+  transition: background var(--dur-fast) var(--ease-soft);
+}
+#saathiToolsDrawer summary:hover { background: var(--input-bg); }
+#saathiToolsDrawer summary::-webkit-details-marker { display: none; }
+#saathiToolsDrawer summary::before {
+  content: "▸ ";
+  color: var(--accent-gold);
+  display: inline-block;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+#saathiToolsDrawer[open] summary::before { content: "▾ "; transform: rotate(0deg); }
+
+.saathi-tools-grid {
+  padding: 4px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: saathiFadeUp var(--dur-base) var(--ease-out);
+}
+.saathi-tools-section-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+.saathi-tools-section-label:first-child { margin-top: 0; }
+.saathi-tools-row { display: flex; gap: 8px; }
+.saathi-tools-row > * { flex: 1 1 0; }
+
+.saathi-tool-btn {
+  width: 100%;
+  height: 32px;
+  border-radius: var(--radius-md) !important;
+  border: 1.5px solid var(--border-color) !important;
+  background: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-soft);
+  box-shadow: none !important;
+}
+.saathi-tool-btn:hover { border-color: var(--accent-gold) !important; color: var(--accent-navy) !important; transform: translateY(-1px); box-shadow: var(--shadow-xs) !important; }
+.saathi-tool-btn:active { transform: translateY(0) scale(0.97); }
+
+.saathi-bulk-check { display: none !important; }
+body.saathi-select-mode .saathi-bulk-check {
+  display: inline-block !important;
+  animation: saathiScaleIn var(--dur-fast) var(--ease-out);
+}
+
+.saathi-tag-chip {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 9.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(47, 111, 184, 0.12);
+  color: var(--accent-navy);
+  cursor: pointer;
+  width: fit-content;
+  transition: background var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-soft);
+}
+.saathi-tag-chip:hover { background: rgba(47, 111, 184, 0.2); transform: translateY(-1px); }
+.saathi-tag-empty { opacity: 0.55; font-style: italic; }
+
+#saathiDraftBanner {
+  background: rgba(217, 164, 78, 0.15);
+  border: 1px solid var(--accent-gold);
+  border-radius: var(--radius-md);
+  padding: 8px 10px;
+  font-size: 10.5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  animation: saathiFadeUp var(--dur-base) var(--ease-out);
+}
+#saathiDraftBanner button {
+  border: none;
+  border-radius: 12px;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-out), filter var(--dur-fast) var(--ease-out);
+}
+#saathiDraftBanner button:hover { transform: translateY(-1px); filter: brightness(1.06); }
+#saathiDraftRestore { background: var(--accent-gradient); color: #1c2233; }
+#saathiDraftDismiss { background: transparent; color: var(--text-muted); }
+
+/* ------------------------------------------------------------
+   15. "DASHBOARD AUR TOOLS" — PREMIUM REDESIGN
+   Stat pills, 7-day chart, cloud backup card, redirect chip and
+   the quick-actions drawer, restyled as one coherent, light,
+   airy set of cards with soft motion. Placed last so it wins on
+   source order over the earlier, plainer rules above.
+   ------------------------------------------------------------ */
+
+/* -- Today / This Month stat pills -- */
+#saathiCounterBadge {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: linear-gradient(135deg, var(--card-bg) 0%, var(--card-bg-soft) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 8px 6px;
+  box-shadow: var(--shadow-xs);
+}
+.saathi-stat-pill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: var(--radius-md);
+  transition: background var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-soft);
+}
+.saathi-stat-pill:hover { background: var(--accent-glow); transform: translateY(-1px); }
+.saathi-stat-icon { font-size: 13px; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.08)); }
+.saathi-stat-num {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--accent-navy);
+  font-variant-numeric: tabular-nums;
+}
+.saathi-stat-label { font-size: 9px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .3px; }
+.saathi-stat-divider { width: 1px; margin: 2px 4px; background: var(--border-color); }
+
+/* -- Last 7 Days chart card -- */
+#saathiDashboard {
+  background: linear-gradient(160deg, var(--card-bg) 0%, var(--card-bg-soft) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px 10px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--dur-base) var(--ease-soft);
+}
+#saathiDashboard:hover { box-shadow: var(--shadow-sm); }
+.saathi-dash-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+.saathi-dash-title { font-size: 11px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 5px; }
+.saathi-dash-title-icon { font-size: 12px; }
+.saathi-dash-fee-chip {
+  font-size: 9.5px; font-weight: 700; color: #7a5a17;
+  background: linear-gradient(135deg, #fdf1da, #f7e3ba);
+  border: 1px solid var(--accent-gold-light);
+  border-radius: var(--radius-pill);
+  padding: 3px 9px;
+  animation: saathiPopIn var(--dur-base) var(--ease-out);
+}
+.saathi-dash-bars { display: flex; align-items: flex-end; gap: 7px; height: 52px; }
+.saathi-dash-col {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%;
+  animation: saathiFadeUp var(--dur-base) var(--ease-out) backwards;
+}
+.saathi-dash-bar {
+  width: 100%;
+  max-width: 18px;
+  background: var(--accent-navy-gradient);
+  border-radius: 6px 6px 2px 2px;
+  transform-origin: bottom;
+  position: relative;
+  transition: height 0.6s var(--ease-out), transform var(--dur-fast) var(--ease-out), filter var(--dur-fast) var(--ease-soft);
+  animation: saathiGrowUp 0.6s var(--ease-out);
+}
+.saathi-dash-bar:hover { transform: scaleX(1.15); filter: brightness(1.08); }
+.saathi-dash-bar::after {
+  content: attr(data-count);
+  position: absolute;
+  top: -18px; left: 50%; transform: translateX(-50%) scale(0.8);
+  font-size: 9px; font-weight: 700; color: var(--accent-navy);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 1px 5px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-soft);
+  box-shadow: var(--shadow-xs);
+}
+.saathi-dash-bar:hover::after { opacity: 1; transform: translateX(-50%) scale(1); }
+.saathi-dash-label { font-size: 8px; color: var(--text-muted); margin-top: 4px; font-weight: 600; }
+
+/* -- Search box: light pill with icon -- */
+.saathi-search-wrap { position: relative; margin-bottom: 12px; border-radius: var(--radius-pill); }
+.saathi-search-wrap .saathi-search-box { margin-bottom: 0; }
+/* One soft gold pulse the moment the operator starts typing/focuses — reuses the app's existing pulse-ring keyframe */
+.saathi-search-wrap:focus-within { animation: saathiPulseRing var(--dur-slow) var(--ease-out); }
+.saathi-search-box {
+  background: var(--input-bg) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="%2364748b" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>') no-repeat 10px center / 12px 12px;
+  padding-left: 30px !important;
+  padding-right: 28px !important;
+  border-radius: var(--radius-pill) !important;
+}
+.saathi-search-clear {
+  position: absolute;
+  right: 6px; top: 50%; transform: translateY(-50%) scale(0.7);
+  width: 18px; height: 18px; border-radius: 50%;
+  border: none; background: var(--border-color); color: var(--text-primary);
+  font-size: 9px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-soft);
+}
+.saathi-search-wrap.saathi-search-has-text .saathi-search-clear { opacity: 1; pointer-events: auto; transform: translateY(-50%) scale(1); }
+.saathi-search-clear:hover { background: var(--danger); color: #fff; }
+/* Magnifying-glass icon turns gold while the box is focused */
+.saathi-search-wrap.saathi-search-focused .saathi-search-box {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="%23d9a44e" stroke-width="2.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>');
+}
+
+/* -- Cloud Backup card -- */
+.saathi-cb-card {
+  background: linear-gradient(160deg, var(--card-bg) 0%, var(--card-bg-soft) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  margin-top: 8px;
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--dur-base) var(--ease-soft), border-color var(--dur-base) var(--ease-soft);
+}
+.saathi-cb-card:hover { box-shadow: var(--shadow-sm); }
+.saathi-cb-head { display: flex; align-items: center; gap: 10px; }
+.saathi-cb-icon {
+  width: 30px; height: 30px; flex-shrink: 0; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 15px;
+  background: linear-gradient(135deg, #dceeff, #c7e2fb);
+  box-shadow: 0 3px 8px -3px rgba(47,111,184,.30);
+  animation: saathiFloat 3.6s ease-in-out infinite;
+}
+.saathi-cb-title { flex: 1; font-size: 11.5px; font-weight: 800; color: var(--text-primary); line-height: 1.3; }
+.saathi-cb-sub { display: block; font-size: 9px; font-weight: 600; color: var(--text-muted); margin-top: 1px; }
+
+.saathi-cb-toggle {
+  display: flex; align-items: center; gap: 6px;
+  border: none; border-radius: var(--radius-pill);
+  padding: 5px 10px 5px 6px;
+  cursor: pointer; flex-shrink: 0;
+  font-size: 9.5px; font-weight: 700;
+  background: var(--input-bg);
+  border: 1.5px solid var(--border-color);
+  color: var(--text-muted);
+  transition: all var(--dur-fast) var(--ease-soft);
+}
+.saathi-cb-toggle:hover { transform: translateY(-1px); box-shadow: var(--shadow-xs); }
+.saathi-cb-toggle:active { transform: translateY(0) scale(0.97); }
+.saathi-cb-switch {
+  width: 26px; height: 15px; border-radius: 999px; background: #cbd5e1;
+  position: relative; transition: background var(--dur-fast) var(--ease-soft); flex-shrink: 0;
+}
+.saathi-cb-knob {
+  position: absolute; top: 1.5px; left: 1.5px; width: 12px; height: 12px; border-radius: 50%;
+  background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.saathi-cb-toggle.saathi-cb-on { color: #1c6b46; border-color: #9fd6b6; background: #eaf5ee; }
+.saathi-cb-toggle.saathi-cb-on .saathi-cb-switch { background: linear-gradient(135deg, #4fae74, #1c6b46); }
+.saathi-cb-toggle.saathi-cb-on .saathi-cb-knob { transform: translateX(11px); }
+.saathi-cb-toggle.saathi-cb-signing { opacity: 0.85; cursor: wait; }
+.saathi-cb-spinner {
+  width: 11px; height: 11px; border-radius: 50%;
+  border: 2px solid rgba(47,111,184,0.25); border-top-color: var(--accent-navy);
+  animation: saathiSpin 0.7s linear infinite;
+}
+@keyframes saathiSpin { to { transform: rotate(360deg); } }
+
+.saathi-cb-status {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 600; color: var(--text-muted);
+  margin-top: 8px; padding-left: 2px;
+  min-height: 14px;
+}
+.saathi-cb-status:empty { margin-top: 0; }
+.saathi-cb-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0; }
+.saathi-cb-status-ok { color: #1c6b46; }
+.saathi-cb-status-ok .saathi-cb-dot { background: #2fae63; animation: saathiPulseDot 2s ease-in-out infinite; }
+.saathi-cb-status-warn { color: #b45309; }
+.saathi-cb-status-warn .saathi-cb-dot { background: #d9a43e; }
+@keyframes saathiPulseDot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(47,174,99,0.45); }
+  50%      { box-shadow: 0 0 0 4px rgba(47,174,99,0); }
+}
+
+/* -- Redirect URL, restyled as a copyable chip -- */
+.saathi-redirect-chip {
+  display: flex; align-items: center; gap: 7px;
+  margin-top: 8px;
+  padding: 7px 10px;
+  font-size: 9.5px;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  color: var(--text-muted);
+  background: var(--input-bg);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  word-break: break-all;
+  line-height: 1.4;
+  transition: all var(--dur-fast) var(--ease-soft);
+}
+.saathi-redirect-chip:hover { border-color: var(--accent-gold); background: var(--input-focus); color: var(--text-primary); transform: translateY(-1px); }
+.saathi-redirect-icon { flex-shrink: 0; font-size: 11px; }
+.saathi-redirect-chip.saathi-redirect-warn { color: #b45309; border-color: #eabd6a; border-style: solid; }
+.saathi-redirect-chip.saathi-redirect-copied { border-color: #2fae63; background: var(--success-light); color: #1c6b46; animation: saathiPopIn var(--dur-fast) var(--ease-out); }
+
+/* -- Quick Actions drawer -- */
+#saathiToolsDrawer summary { display: flex; align-items: center; gap: 6px; }
+.saathi-tools-summary-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 6px; font-size: 11px;
+  background: var(--accent-gradient); color: #1c2233;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+#saathiToolsDrawer[open] .saathi-tools-summary-icon { transform: rotate(-8deg) scale(1.08); }
+
+.saathi-tools-grid > * { animation: saathiFadeUp var(--dur-base) var(--ease-out) backwards; }
+.saathi-tools-grid > *:nth-child(1) { animation-delay: .02s; }
+.saathi-tools-grid > *:nth-child(2) { animation-delay: .05s; }
+.saathi-tools-grid > *:nth-child(3) { animation-delay: .08s; }
+.saathi-tools-grid > *:nth-child(4) { animation-delay: .11s; }
+.saathi-tools-grid > *:nth-child(5) { animation-delay: .14s; }
+.saathi-tools-grid > *:nth-child(n+6) { animation-delay: .17s; }
+
+.saathi-tool-btn-accent {
+  background: var(--accent-gradient) !important;
+  border-color: var(--accent-gold) !important;
+  color: #1c2233 !important;
+  font-weight: 700 !important;
+  box-shadow: var(--shadow-gold) !important;
+}
+.saathi-tool-btn-accent:hover { filter: brightness(1.05); box-shadow: 0 10px 22px -8px var(--gold-glow) !important; }
+
+.saathi-tool-btn-danger { color: var(--danger) !important; }
+.saathi-tool-btn-danger:hover { border-color: var(--danger) !important; background: rgba(217,83,79,0.08) !important; color: var(--danger) !important; }
+
+/* ------------------------------------------------------------
+   16. QUICK ACTIONS — COLOR-CODED GROUPS
+   Each group (bulk / backup / security) gets its own soft tinted
+   card, a colored icon chip on its label, and buttons whose emoji
+   sits in a small matching badge — so the drawer reads as three
+   distinct, organized zones instead of one flat list.
+   ------------------------------------------------------------ */
+.saathi-tools-grid { gap: 10px; }
+
+.saathi-tools-group {
+  border-radius: var(--radius-md);
+  padding: 10px 10px 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  border: 1px solid transparent;
+  transition: box-shadow var(--dur-base) var(--ease-soft), transform var(--dur-base) var(--ease-soft);
+}
+.saathi-tools-group:hover { box-shadow: var(--shadow-xs); }
+
+.saathi-tools-section-label {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 9.5px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .5px;
+  margin: 0;
+}
+.saathi-tools-label-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 6px; font-size: 10.5px;
+  flex-shrink: 0;
+}
+
+.saathi-tool-btn { display: flex !important; align-items: center; gap: 8px; text-align: left; padding: 0 11px !important; }
+.saathi-btn-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 7px; font-size: 11px;
+  flex-shrink: 0; background: var(--input-bg);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.saathi-btn-label { flex: 1; }
+.saathi-tool-btn:hover .saathi-btn-icon { transform: scale(1.12) rotate(-4deg); }
+
+/* -- Bulk actions: emerald -- */
+.saathi-group-bulk { background: linear-gradient(160deg, rgba(47,174,99,0.07), rgba(47,174,99,0.02)); border-color: rgba(47,174,99,0.14); }
+.saathi-group-bulk .saathi-tools-section-label { color: #1c6b46; }
+.saathi-group-bulk .saathi-tools-label-icon { background: linear-gradient(135deg, #b9ecc9, #7cd6a0); }
+.saathi-group-bulk .saathi-btn-icon { background: rgba(47,174,99,0.14); }
+.saathi-group-bulk .saathi-tool-btn:hover { border-color: #7cd6a0 !important; color: #1c6b46 !important; box-shadow: 0 6px 16px -8px rgba(47,174,99,0.35) !important; }
+#saathiSelectModeBtn.saathi-btn-active { background: linear-gradient(135deg, #d8f3e2, #c3ecd2) !important; border-color: #7cd6a0 !important; color: #1c6b46 !important; }
+#saathiSelectModeBtn.saathi-btn-active .saathi-btn-icon { background: #ffffff; animation: saathiPopIn var(--dur-fast) var(--ease-out); }
+
+/* -- Backup: sky blue -- */
+.saathi-group-backup { background: linear-gradient(160deg, rgba(47,111,184,0.07), rgba(47,111,184,0.02)); border-color: rgba(47,111,184,0.14); }
+.saathi-group-backup .saathi-tools-section-label { color: var(--accent-navy); }
+.saathi-group-backup .saathi-tools-label-icon { background: linear-gradient(135deg, #cfe4fb, #9bc6ef); }
+.saathi-group-backup .saathi-btn-icon { background: rgba(47,111,184,0.12); }
+.saathi-group-backup .saathi-tool-btn:hover { border-color: var(--accent-navy-2) !important; color: var(--accent-navy) !important; box-shadow: 0 6px 16px -8px rgba(47,111,184,0.30) !important; }
+
+/* -- Security: violet -- */
+.saathi-group-security { background: linear-gradient(160deg, rgba(124,92,199,0.08), rgba(124,92,199,0.02)); border-color: rgba(124,92,199,0.16); }
+.saathi-group-security .saathi-tools-section-label { color: #6d4fb0; }
+.saathi-group-security .saathi-tools-label-icon { background: linear-gradient(135deg, #ddd0f7, #bba3ec); }
+.saathi-group-security .saathi-btn-icon { background: rgba(124,92,199,0.14); }
+.saathi-group-security .saathi-tool-btn { border-style: solid !important; }
+.saathi-group-security .saathi-tool-btn:hover { border-color: #a687e0 !important; color: #6d4fb0 !important; box-shadow: 0 6px 16px -8px rgba(124,92,199,0.30) !important; }
+
+.saathi-tools-grid > .saathi-tools-group { animation: saathiFadeUp var(--dur-base) var(--ease-out) backwards; }
+.saathi-tools-grid > .saathi-tools-group:nth-child(1) { animation-delay: .03s; }
+.saathi-tools-grid > .saathi-tools-group:nth-child(2) { animation-delay: .08s; }
+.saathi-tools-grid > .saathi-tools-group:nth-child(3) { animation-delay: .13s; }
+
+/* ------------------------------------------------------------
+   17. EMPTY STATES + BULK-SELECT CARD HIGHLIGHT
+   Referenced by docsTab.js / emptyStates.js (.saathi-empty-*) and
+   by the bulk-select checkboxes (.saathi-card-selected) but had no
+   matching rules yet, so both rendered unstyled until now.
+   ------------------------------------------------------------ */
+.saathi-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 28px 20px;
+  color: var(--text-muted);
+  animation: saathiFadeUp var(--dur-base) var(--ease-out);
+}
+.saathi-empty-icon {
+  font-size: 26px;
+  margin-bottom: 2px;
+  animation: saathiFloat 3s ease-in-out infinite;
+}
+.saathi-empty-title { font-size: 11.5px; font-weight: 700; color: var(--text-primary); }
+.saathi-empty-sub { font-size: 10px; line-height: 1.5; max-width: 240px; }
+
+.saathi-card-selected {
+  border-color: var(--accent-gold) !important;
+  background: linear-gradient(135deg, rgba(217,164,78,0.08), rgba(217,164,78,0.02)) !important;
+  box-shadow: 0 0 0 2px var(--gold-glow) !important;
+  transition: box-shadow var(--dur-fast) var(--ease-soft), border-color var(--dur-fast) var(--ease-soft), background var(--dur-fast) var(--ease-soft);
+}
+
+</style>
+<link rel="stylesheet" href="ocrUpgrade.css">
+<link rel="stylesheet" href="docVault.css">
+<link rel="stylesheet" href="appTheme.css">
+<link rel="stylesheet" href="fullpage.css">
+<script src="appearanceBoot.js"></script>
+</head>
+
+<body>
+  <!-- Main Application Header Title -->
+  <h2>
+    <img class="saathi-header-logo" src="brand/app-icon.svg" alt="" width="22" height="22">
+    <span class="saathi-brand">Click <span class="saathi-brand-accent">&amp; Continue</span></span>
+    <span class="saathi-divider">•</span>
+    <span class="saathi-tagline">Form Fill Up</span>
+  </h2>
+
+  <!-- Subheader Guidance Notice -->
+  <h3><span class="saathi-h3-icon">📋</span> Open Page <a href="https://serviceonline.bihar.gov.in/">Niwas</a> To Fill This Form</h3>
+
+  <!-- Navigation Bar Wrapper Container -->
+  <div class="nav-bar-wrapper">
+    <div id="tabs" class="nav-bar">
+      <div class="nav-tabs-group">
+        <button id="tab-form" class="tab-btn">Form</button>
+        <button id="tab-saved" class="tab-btn">Profile</button>
+        <button id="tab-docs" class="tab-btn">OCR</button>
+      </div>
+      <div class="nav-actions-group">
+        <button id="themeToggleBtn" class="theme-toggle-btn">🌓 Theme</button>
+        <button id="addNewRecord" class="add-record-btn">+ Create Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Area Wrapper -->
+  <div id="tab-contents">
+
+    <!-- Form Section Container -->
+    <div id="content-form">
+      <form id="dataForm">
+        <div class="form-container">
+          
+          <!-- Name Input Group -->
+          <div class="form-group">
+            <label for="name">नाम</label>
+            <input type="text" id="name" required>
+          </div>
+
+          <!-- Father's Name Input Group -->
+          <div class="form-group">
+            <label for="fathername">पिता का नाम</label>
+            <input type="text" id="fathername" required>
+          </div>
+          
+          <!-- Mother's Name Input Group -->
+          <div class="form-group">
+            <label for="mothername">माता का नाम</label>
+            <input type="text" id="mothername" required>
+          </div>
+
+          <!-- Husband's Name Input Group -->
+          <div class="form-group">
+            <label for="husbandname">पति का नाम</label>
+            <input type="text" id="husbandname">
+          </div>
+
+          <!-- Gender Radio Selection Group -->
+          <div class="form-group">
+            <label>लिंग</label>
+            <div class="radio-group">
+              <input type="radio" id="male" name="gender" value="1" required>
+              <label for="male">पुरुष</label>
+              <input type="radio" id="female" name="gender" value="2">
+              <label for="female">महिला</label>
+            </div>
+          </div>
+
+          <!-- Address Type Radio Group -->
+          <div class="form-group">
+            <label>पते का प्रकार</label>
+            <div class="radio-group">
+              <input type="radio" id="permanent" name="addressType" value="1" required>
+              <label for="permanent">स्थायी</label>
+              <input type="radio" id="present" name="addressType" value="2">
+              <label for="present">वर्तमान</label>
+            </div>
+          </div>
+     
+          <!-- Mobile Number Input Group -->
+          <div class="form-group">
+            <label for="mobile">मोबाइल नंबर</label>
+            <input type="text" id="mobile" pattern="[0-9]{10}">
+          </div>
+
+          <!-- Email Address Input Group -->
+          <div class="form-group">
+            <label for="email">ईमेल</label>
+            <input type="email" value="Digitalsaath.help@gmail.com" id="email">
+          </div>
+     
+          <!-- State Selection Dropdown -->
+          <div class="form-group">
+            <label for="state">राज्य</label>
+            <select id="state" required>
+              <option value="">Please Select</option>	
+              <option value="10">BIHAR</option>
+            </select>
+          </div>
+
+          <!-- District Selection Dropdown -->
+          <div class="form-group">
+            <label for="district">जिला</label>
+            <select id="district">
+              <option value="">Select District</option>
+            </select>
+          </div>
+
+          <!-- Anumandal Selection Dropdown -->
+          <div class="form-group">
+            <label for="anumandal">अनुमंडल</label>
+            <select id="anumandal">
+              <option value="">Select Anumandal</option>
+            </select>
+          </div>
+
+          <!-- Prakhand Selection Dropdown -->
+          <div class="form-group">
+            <label for="prakhand">प्रखंड</label>
+            <select id="prakhand">
+              <option value="">Select Prakhand</option>
+            </select>
+          </div>
+      
+          <!-- Residence Type Selection Group -->
+          <div class="form-group form-wide">
+            <label>निवास का प्रकार</label>
+            <div class="radio-group">
+              <input type="radio" id="gramPanchayat" name="residenceType" value="1" required>
+              <label for="gramPanchayat">ग्राम पंचायत</label>
+              <input type="radio" id="nagarNigam" name="residenceType" value="2">
+              <label for="nagarNigam">नगर निगम</label>
+              <input type="radio" id="nagarParishad" name="residenceType" value="3">
+              <label for="nagarParishad">नगर परिषद</label>
+              <input type="radio" id="nagarPanchayat" name="residenceType" value="4">
+              <label for="nagarPanchayat">नगर पंचायत</label>
+            </div>        
+          </div>
+
+          <!-- Gram Panchayat Dropdown -->
+          <div class="form-group">
+            <label for="gram">ग्राम पंचायत</label>
+            <select id="gram">
+              <option value="">Select Grampanchayat</option>
+            </select>
+          </div>
+
+          <!-- Ward Number Input Group -->
+          <div class="form-group">
+            <label for="wardNo">वार्ड नंबर</label>
+            <input type="number" id="wardNo" required>
+          </div>
+
+          <!-- Village/Locality Input Group -->
+          <div class="form-group">
+            <label for="village">गांव/मोहल्ला</label>
+            <input type="text" id="village" required>
+          </div>
+
+          <!-- Pincode Input Group -->
+          <div class="form-group">
+            <label for="pin">पिन कोड</label>
+            <input type="text" id="pin" pattern="[0-9]{6}" required>
+          </div>
+
+          <!-- Post Office Input Group -->
+          <div class="form-group">
+            <label for="postoffice">डाकघर</label>
+            <input type="text" id="postoffice" required>
+          </div>
+
+          <!-- Police Station Dropdown -->
+          <div class="form-group">
+            <label for="policeStation">थाना</label>
+            <select id="policeStation">
+              <option value="">Select Police Station</option>
+            </select>
+          </div>
+
+          <!-- Application Purpose Input Group -->
+          <div class="form-group">
+            <label for="purpose">आवेदन का उद्देश्य</label>
+            <input type="text" id="purpose" required>
+          </div>
+
+          <!-- Image Upload File Input -->
+          <div class="form-group">
+            <label for="image">फोटो (20 KB - 320 KB | JPEG)</label>
+            <input type="file" id="image" accept="image/*">
+          </div>
+
+          <!-- Parent Document Type Dropdown -->
+          <div class="form-group">
+            <label for="documentType">माता/पिता का दस्तावेज</label>
+            <select id="documentType">
+              <option value="">Select Document Type</option>
+              <option value="94358_1">राजस्व अभिलेख - खतियान</option>
+              <option value="94358_2">राजस्व अभिलेख - द्वानपत्र</option>
+              <option value="94358_3">राजस्व अभिलेख - भूमि संबंधी दस्तावेज</option>
+              <option value="94358_4">राजस्व अभिलेख - भूमिहीनों को आवंटित जमीन से संबंधित अभिलेख</option>
+              <option value="94358_5">अन्य राजस्व अभिलेख</option>
+              <option value="94358_6">रासन कार्ड </option>
+              <option value="94358_7">निर्वाचन पहचान पत्र</option>
+              <option value="94358_8">विद्युत विपत्र</option>
+              <option value="94358_9">दूरभाष विपत्र</option>
+            </select>
+          </div>    
+
+          <!-- Empty Structural Form Group -->
+          <div class="form-group"></div>  
+
+          <!-- Image Preview Element -->
+          <div class="form-group">
+             <img id="imagePreview" alt="Image preview">
+          </div>
+
+          <!-- Income Section Header Title -->
+          <div class="form-group">
+            <h3>केवल आय प्रमाण पत्र के लिए</h3>
+          </div>
+
+          <!-- Profession Dropdown -->
+          <div class="form-group">
+            <label for="profession">पेशा</label>
+            <select id="profession">
+              
+              <option value="" >Please Select</option>
+              <option value="1" autocomplete="off">छात्र / Student</option>
+              <option value="2" autocomplete="off">सरकारी सेवा / Govt. Service</option>
+              <option value="3" autocomplete="off">निजी सेवा / Private Service</option>
+              <option value="4" autocomplete="off">व्यापार / Business</option>
+              <option value="5" autocomplete="off">किसान / Farmer</option>
+              <option value="6" autocomplete="off">गृहिणी / Housewife</option>
+              <option value="7" autocomplete="off">अन्य / Other</option>
+            </select>
+          </div>
+
+          <!-- Income from Government Input -->
+          <div class="form-group">
+             <label for="incomefromgovt">सरकार से आय</label>
+            <input type="text" id="incomefromgovt">
+          </div>
+
+          <!-- Income from Business Input -->
+          <div class="form-group">
+             <label for="incomefrombusiness">व्यापार से आय</label>
+            <input type="text" id="incomefrombusiness">
+          </div>
+
+          <!-- Income from Agriculture Input -->
+          <div class="form-group">
+             <label for="incomefromagriculture">कृषि से आय</label>
+            <input type="text" id="incomefromagriculture">
+          </div>
+
+          <!-- Income from Other Sources Input -->
+          <div class="form-group">
+             <label for="incomefromothers">अन्य स्त्रोतो से आय</label>
+            <input type="text" id="incomefromothers">
+          </div>
+
+          <!-- Hidden Total Income Input -->
+          <div class="form-group">
+             <label for="totalincome">कुल आय</label>
+            <input type="text" id="totalincome">
+          </div>
+
+          <!-- Income Document Type Dropdown -->
+          <div class="form-group">
+             <label for="incomeDocumentType">माता/पिता की आय</label>
+            <select id="incomeDocumentType">
+              <option value="">Select Income Document Type</option>
+              <option value="94045_1">वेतन / पेंशन पर्ची</option>
+              <option value="94045_2">आयकर रिटर्न</option>
+              <option value="94045_3">अन्यान्य अभिलेख</option>         
+            </select>
+          </div>      
+
+          <!-- Empty Structural Form Group -->
+          <div class="form-group"></div>
+
+          <!-- Caste Section Header Title -->
+          <div class="form-group">
+            <h3>केवल जाति प्रमाण पत्र के लिए</h3>
+          </div>
+
+          <!-- Caste Profession Dropdown -->
+          <div class="form-group">
+            <label for="casteprofession">पेशा / Profession</label>
+            <select id="casteprofession">
+              <option value="">Please Select</option>
+              <option value="1" autocomplete="off">छात्र / Student</option>
+              <option value="2" autocomplete="off">सरकारी सेवा / Govt. Service</option>
+              <option value="3" autocomplete="off">निजी सेवा / Private Service</option>
+              <option value="4" autocomplete="off">व्यापार / Business</option>
+              <option value="5" autocomplete="off">किसान / Farmer</option>
+              <option value="6" autocomplete="off">गृहिणी / Housewife</option>
+              <option value="7" autocomplete="off">अन्य / Other</option>
+            </select>
+          </div>
+
+          <!-- Caste Category Dropdown -->
+          <div class="form-group">
+            <label for="castecategory">वर्ग / Category</label>
+            <select id="castecategory">
+              <option value="" autocomplete="off">Please Select</option>
+              <option value="1" autocomplete="off">अत्यंत पिछड़ा वर्ग (अनुसूची-1)</option>
+              <option value="2" autocomplete="off">पिछड़ा वर्ग (अनुसूची-2)</option>
+              <option value="3" autocomplete="off">अनुसूचित जाति</option>
+              <option value="4" autocomplete="off">अनुसूचित जनजाति</option>
+              <option value="5" autocomplete="off">गैर आरक्षित</option>
+            </select>
+          </div>
+
+          <!-- Caste Dropdown -->
+          <div class="form-group">
+            <label for="caste">जाति / Caste</label>
+            <select id="caste">
+              <option value="">Please Select</option>
+            </select>
+          </div>
+
+          <!-- Sub-Caste Dropdown -->
+          <div class="form-group">
+            <label for="subcaste">उपजाति</label>
+            <select id="subcaste">
+              <option value="">Please Select</option>
+            </select>
+          </div>
+
+          <!-- General Caste Input -->
+          <div class="form-group">
+            <label for="generalcaste">सामान्य जाति</label>
+            <input type="text" id="generalcaste" placeholder="For General Category only">
+          </div>
+
+          <!-- Caste Document Type Dropdown -->
+          <div class="form-group">
+            <label for="casteDocumentType">माता/पिता का दस्तावेज</label>
+            <select id="casteDocumentType">
+              <option value="">Select Document Type</option>
+              <option value="93963_1">राजस्व अभिलेख - खतियान</option>
+              <option value="93963_2">राजस्व अभिलेख - द्वानपत्र</option>
+              <option value="93963_3">राजस्व अभिलेख - भूमि संबंधी दस्तावेज</option>
+              <option value="93963_4">राजस्व अभिलेख - भूमिहीनों को आवंटित जमीन से संबंधित अभिलेख</option>
+              <option value="93963_5">अन्य राजस्व अभिलेख</option>
+              <option value="93963_6">राजस्व अभिलेखों की अनुपलब्धता की स्थिति में स्थल निरीक्षण हेतु आग्रह</option>
+            </select>
+          </div>
+
+          <!-- Empty Structural Form Group -->
+          <div class="form-group"></div>
+
+          <!-- Digital Saathi: Enclosure documents for THIS profile —
+               lives right here so uploads are always tied to the
+               customer currently being created/edited. -->
+          <div class="form-group" id="enclosureDocsSection" style="grid-column: span 3;"></div>
+
+          <!-- Form Submission & Reset Buttons -->
+          <div class="form-group form-actions">
+            <button type="reset" class="btn btn-danger">Clear</button>
+            <button type="submit" class="btn btn-primary">SAVE</button>
+          </div>
+
+        </div> 
+      </form>
+    </div>
+
+    <!-- Saved Data Tab Content Section -->
+    <div id="content-saved">
+      <div></div>
+      <div id="savedList"></div>
+      <div id="noSaved">No Entry</div>
+    </div>
+
+    <!-- Documents Tab: upload any ID/certificate, OCR-extract, auto-fill -->
+    <div id="content-docs" style="display:none;">
+      <div class="docs-panel">
+        <p class="docs-hint">
+        Adhar Card , Voter Card |
+         
+        </p>
+
+        <button type="button" id="openCustomerFormBtn" class="saathi-tool-btn" style="margin-bottom:12px;">
+          🔗 Add Link
+        </button>
+
+        <div class="form-group">
+          <label for="docUploadInput"> Uplode Files</label>
+          <div id="docDropZone" class="doc-dropzone">
+            <span>📄 Choose Files</span>
+          </div>
+          <input type="file" id="docUploadInput" accept="image/*,.pdf" multiple style="display:none;">
+        </div>
+
+        <div id="docFileList" class="doc-file-list"></div>
+
+        <div class="form-actions" style="justify-content:flex-start; border-top:none; padding-top:0;">
+          <button type="button" id="extractBtn" class="btn btn-primary">APPLY  &amp; OCR</button>
+          <button type="button" id="clearDocsBtn" class="btn btn-danger">Clear</button>
+        </div>
+
+        <div id="docReviewContainer" class="doc-review-container"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JavaScript Dependencies and Application Logic Scripts -->
+
+<!-- Shared UI helpers used by many of the scripts below (toast
+     notifications) — one implementation instead of eight copies. -->
+<script src="saathiShared.js" charset="utf-8"></script>
+
+<!-- Fixes the "Fill Active Profile" shortcut / mini switcher's
+     unrelated-error bug — must load before popup.js (see the file
+     itself for why). -->
+<script src="autoLoadTabPatch.js" charset="utf-8"></script>
+
+<!-- Offline OCR + PDF rendering libraries (see vendor/README.md for
+     exact files/versions to download and place here). Loaded before
+     our own scripts, which depend on the globals they expose.
+     Both pdf.js (~1MB) AND tesseract.min.js are now LAZY-loaded —
+     these two loader files only define window.ensurePdfjsLoaded() /
+     window.ensureTesseractLoaded(), which ocrEngine.js/pdfTools.js
+     call the first time a PDF/OCR action actually happens, instead
+     of paying that cost on every single popup open. -->
+<script src="pdfjsLoader.js" charset="utf-8"></script>
+<script src="tesseractLoader.js" charset="utf-8"></script>
+<script src="casteData.js" charset="utf-8"></script>
+<script src="subCasteData.js" charset="utf-8"></script>
+
+<!-- New: document-upload / OCR auto-fill feature (additive, does not
+     modify content.js or popup.js) -->
+<script src="translit.js" charset="utf-8"></script>
+<script src="documentParser.js" charset="utf-8"></script>
+<script src="ocrPreprocess.js" charset="utf-8"></script>
+<script src="ocrLexicon.js" charset="utf-8"></script>
+<script src="ocrEngine.js" charset="utf-8"></script>
+<script src="docStore.js" charset="utf-8"></script>
+<script src="enclosureMatch.js" charset="utf-8"></script>
+<script src="pdfTools.js" charset="utf-8"></script>
+<script src="docsTab.js" charset="utf-8"></script>
+<script src="ocrMemoryPanel.js" charset="utf-8"></script>
+<script src="extraTabs.js" charset="utf-8"></script>
+<script src="docVault.js" charset="utf-8"></script>
+<script src="certJob.js" charset="utf-8"></script>
+<script src="certStatusJob.js" charset="utf-8"></script>
+<script src="certDownload.js" charset="utf-8"></script>
+<script src="certStatus.js" charset="utf-8"></script>
+<script src="appearance.js" charset="utf-8"></script>
+<script src="cmdk.js" charset="utf-8"></script>
+<script src="enclosureDocsPanel.js" charset="utf-8"></script>
+<script src="profileCardEnhancer.js" charset="utf-8"></script>
+<script src="docProfileLink.js" charset="utf-8"></script>
+<script src="importExport.js" charset="utf-8"></script>
+<script src="cloudBackupToggle.js" charset="utf-8"></script>
+<script src="uiFixes.js" charset="utf-8"></script>
+<script src="landingScreen.js" charset="utf-8"></script>
+<script src="premiumFeatures.js" charset="utf-8"></script>
+<script src="premiumFeatures2.js" charset="utf-8"></script>
+<script src="premiumFeatures3.js" charset="utf-8"></script>
+<script src="premiumFeatures4.js" charset="utf-8"></script>
+<script src="profileToolsPanel.js" charset="utf-8"></script>
+<script src="premiumFeatures5.js" charset="utf-8"></script>
+<script src="profileTopCollapse.js" charset="utf-8"></script>
+<script src="emptyStates.js" charset="utf-8"></script>
+<script src="formActionsPanel.js" charset="utf-8"></script>
+
+<script src="popup.js" charset="utf-8"></script>
+<script src="locationData.js" charset="utf-8"></script>
+<script src="locationCascade.js" charset="utf-8"></script>
+<script src="shortcutAutoLoad.js" charset="utf-8"></script>
+<script src="signatureCore.js" charset="utf-8"></script>
+<script src="signatureOnPhoto.js" charset="utf-8"></script>
+<script src="healthCheck.js" charset="utf-8"></script>
+<script src="nclFields.js" charset="utf-8"></script>
+<script src="ewsFields.js"></script>
+
+<script src="fullpage.js"></script>
+</body>
+
+</html>

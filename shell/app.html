@@ -1,0 +1,142 @@
+<!doctype html><html lang="hi"><head><meta charset="utf-8"><title>Click & Continue</title>
+<style>
+:root{--bg:#f3f5fa;--card:#fff;--line:#e4e8f1;--tx:#142038;--mut:#6b778f;--navy:#0f2547;--navy2:#1b3a6b;--saf:#f59e0b;--saf2:#d97706;--teal:#0d9488;--red:#e5484d;--blue:#2563eb;--r:14px}
+*{box-sizing:border-box;margin:0}
+body{font:14px/1.45 "Segoe UI Variable","Segoe UI","Nirmala UI",system-ui,sans-serif;color:var(--tx);background:var(--bg);display:grid;grid-template-columns:240px 1fr;height:100vh;overflow:hidden}
+aside{background:linear-gradient(180deg,var(--navy),#0a1a35);color:#cfd9ee;padding:20px 14px;display:flex;flex-direction:column;gap:4px}
+.logo{display:flex;gap:10px;align-items:center;padding:4px 10px 20px;color:#fff;font-weight:700;font-size:16px}
+.logo i{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--saf),var(--saf2));display:grid;place-items:center;color:var(--navy);font-style:normal;font-weight:800}
+.logo small{display:block;font-weight:400;font-size:11px;color:#8fa3c8}
+.nav{display:flex;gap:12px;align-items:center;padding:11px 12px;border-radius:11px;cursor:pointer;color:#b4c3e0}
+.nav:hover{background:rgba(255,255,255,.07);color:#fff}.nav.on{background:rgba(245,158,11,.16);color:#fff;box-shadow:inset 3px 0 var(--saf)}
+.nav b{margin-left:auto;background:var(--saf);color:var(--navy);border-radius:10px;font-size:11px;padding:1px 7px}
+.sp{flex:1}.user{display:flex;gap:10px;align-items:center;padding:12px;border-radius:12px;background:rgba(255,255,255,.06)}
+.av{width:34px;height:34px;border-radius:50%;background:var(--teal);display:grid;place-items:center;color:#fff;font-weight:700}
+main{overflow:auto;padding:0 32px 32px}
+.top{position:sticky;top:0;background:var(--bg);display:flex;align-items:center;gap:14px;padding:20px 0 14px;z-index:2}
+.top h1{font-size:22px}.top p{color:var(--mut);font-size:13px}
+.search{margin-left:auto;width:300px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;outline:0}
+.btn{border:0;border-radius:11px;padding:10px 16px;font-weight:600;cursor:pointer;background:var(--card);border:1px solid var(--line);color:var(--tx)}
+.btn.p{background:linear-gradient(135deg,var(--saf),var(--saf2));color:#fff;border:0;box-shadow:0 6px 16px rgba(217,119,6,.28)}
+.btn.n{background:var(--navy);color:#fff;border:0}
+.page{display:none}.page.on{display:block}
+.grid{display:grid;gap:18px}.g4{grid-template-columns:repeat(4,1fr)}.g2{grid-template-columns:1.6fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:0 1px 2px rgba(15,37,71,.04)}
+.card h3{font-size:15px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.stat{display:flex;gap:14px;align-items:center}.ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:21px}
+.stat b{font-size:26px;display:block;line-height:1.1}.stat span{color:var(--mut);font-size:12px}
+table{width:100%;border-collapse:collapse}th{text-align:left;color:var(--mut);font-size:12px;font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:12px 10px;border-bottom:1px solid #f0f2f8}tr:last-child td{border:0}tr:hover td{background:#fafbfe}
+.pn{display:flex;align-items:center;gap:10px;font-weight:600}.pn .av{width:34px;height:34px;font-size:13px}
+.tag{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}.ok{background:#d9f5f1;color:#0a7a70}.wt{background:#fff1d6;color:#b45f06}.er{background:#fde4e5;color:#b42327}.bl{background:#e3ecff;color:#1d4ed8}
+.act button{border:0;background:#eef2fb;border-radius:8px;padding:6px 10px;margin-right:4px;cursor:pointer;font-weight:600;color:var(--navy2)}
+.act button.l{background:var(--navy);color:#fff}
+.qa{display:grid;grid-template-columns:1fr 1fr;gap:10px}.qa div{padding:16px;border-radius:12px;background:#f6f8fd;cursor:pointer;font-weight:600}.qa div{color:var(--tx)}.qa small{display:block;color:var(--mut);font-weight:400;font-size:12px}
+.field label{font-size:12px;font-weight:600;color:var(--mut);display:block;margin-bottom:6px}
+.field input,.field select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fbfcff}
+.fg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.drop{border:2px dashed #c4cfe6;border-radius:var(--r);padding:36px;text-align:center;background:#fafcff}.drop big{font-size:38px}
+.steps{display:flex;gap:8px;margin-bottom:16px}.steps span{flex:1;padding:10px;border-radius:10px;background:#eef2fb;color:var(--mut);font-weight:600;text-align:center}.steps .d{background:#d9f5f1;color:#0a7a70}.steps .c{background:var(--navy);color:#fff}
+.bar{height:8px;border-radius:6px;background:#e9edf6;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),#2dd4bf)}
+
+.i{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic .i{width:23px;height:23px}
+.logo{white-space:nowrap;font-size:15px;gap:9px;padding-right:0}.logo div{line-height:1.2}
+.top>:nth-child(2){margin-left:auto}.top .search+.btn{margin-left:0}
+.btn{display:inline-flex;align-items:center;gap:7px;transition:.15s}.btn:hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(15,37,71,.12)}
+.btn .i{width:17px;height:17px}
+.nav{transition:.15s;font-weight:500}.nav.on{background:rgba(245,158,11,.18)!important}
+.nav .i{opacity:.9}
+input:focus,select:focus{outline:0;border-color:var(--saf)!important;box-shadow:0 0 0 3px rgba(245,158,11,.18)}
+.conn{display:flex;align-items:center;gap:8px;font-size:12px;color:#8fe3c9;padding:8px 12px;margin-bottom:6px}.conn i{width:8px;height:8px;border-radius:50%;background:#2dd4bf;box-shadow:0 0 0 4px rgba(45,212,191,.2)}
+.fl{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start}
+.sum{position:sticky;top:84px}
+.chips{display:flex;gap:8px}.chips span{flex:1;text-align:center;padding:11px;border:1px solid var(--line);border-radius:10px;background:#fbfcff;cursor:pointer;font-weight:600;color:var(--mut)}
+.chips span.on{background:#fff4dc;border-color:var(--saf);color:#b45f06}
+.miss{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #f0f2f8;color:var(--mut)}.miss:last-child{border:0}
+.miss b{width:8px;height:8px;border-radius:50%;background:var(--saf);flex:none}
+.ring{width:96px;height:96px;border-radius:50%;margin:4px auto 14px;display:grid;place-items:center;background:conic-gradient(var(--teal) 82%,#e9edf6 0)}
+.ring span{width:74px;height:74px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:22px;font-weight:800}
+.tbl-in{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font:inherit;font-weight:600;background:#fff}
+.cf{display:flex;align-items:center;gap:8px}.cf .bar{width:60px;height:6px}.cf .bar i{background:var(--teal)}.cf .bar.w i{background:var(--saf)}
+.filters{display:flex;gap:8px;margin-bottom:16px}.filters span{padding:7px 14px;border-radius:20px;background:#fff;border:1px solid var(--line);font-weight:600;color:var(--mut);cursor:pointer}.filters .on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,30px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:12px;display:flex;gap:10px;align-items:center;opacity:0;transition:.25s;box-shadow:0 12px 30px rgba(15,37,71,.3);z-index:9}
+.toast.on{opacity:1;transform:translate(-50%,0)}.toast .i{color:#2dd4bf}
+.drop{transition:.15s}.drop:hover{border-color:var(--saf);background:#fffaf0}
+.hint{color:var(--mut);font-size:12px;display:flex;gap:6px;align-items:center}
+kbd{background:#eef2fb;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 6px;font:600 11px system-ui}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="i-dash" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6M17 4a4 4 0 010 8M22 21c0-3-2-5-4-5.6"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4"/></symbol>
+<symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M4 12h16"/></symbol>
+<symbol id="i-radar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18a4 4 0 010-8 5 5 0 019.6-1A4.5 4.5 0 0117 18H7z"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3L5 14h6l-1 7 8-11h-6l1-7z"/></symbol>
+<symbol id="i-up" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v12M7 11l5 5 5-5M4 20h16"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h8l5 5v13H6zM14 3v5h5"/></symbol>
+<symbol id="i-hour" viewBox="0 0 24 24"><path d="M7 3h10M7 21h10M8 3c0 6 8 6 8 9s-8 3-8 9"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+</defs></svg>
+<aside>
+ <div class="logo"><i>C</i><div>Click &amp; Continue<small>RTPS Form Assistant</small></div></div>
+ <div class="nav on" data-p="dash"><svg class="i"><use href="#i-dash"/></svg> Dashboard</div><div class="nav" data-p="prof"><svg class="i"><use href="#i-users"/></svg> Profiles <b>128</b></div>
+ <div class="nav" data-p="form"><svg class="i"><use href="#i-edit"/></svg> Form Fill</div><div class="nav" data-p="ocr"><svg class="i"><use href="#i-scan"/></svg> OCR Documents</div>
+ <div class="nav" data-p="stat"><svg class="i"><use href="#i-radar"/></svg> Certificate Status</div><div class="nav" data-p="set"><svg class="i"><use href="#i-cloud"/></svg> Backup &amp; Settings</div>
+ <div class="sp"></div><div class="conn"><i></i>Portal connected</div><div class="nav"><svg class="i"><use href="#i-globe"/></svg> Portal kholo</div>
+ <div class="user"><div class="av">R</div><div>Rakesh CSC<br><small style="color:#8fa3c8">Patna, Bihar</small></div></div>
+</aside>
+<main>
+<section class="page on" id="dash"><div class="top"><div><h1>Namaste, Rakesh 👋</h1><p>Aaj ka kaam ek nazar me</p></div><input class="search" placeholder="Profile, mobile ya application number khojo…"><button class="btn p"><svg class="i"><use href="#i-plus"/></svg> Naya Profile</button></div>
+ <div class="grid g4"><div class="card stat"><div class="ic" style="background:#e3ecff;color:#2563eb"><svg class="i"><use href="#i-users"/></svg></div><div><b>128</b><span>Total profiles</span></div></div>
+ <div class="card stat"><div class="ic" style="background:#d9f5f1;color:#0d9488"><svg class="i"><use href="#i-check"/></svg></div><div><b>34</b><span>Aaj bhare gaye forms</span></div></div>
+ <div class="card stat"><div class="ic" style="background:#fff1d6;color:#d97706"><svg class="i"><use href="#i-hour"/></svg></div><div><b>9</b><span>Status pending</span></div></div>
+ <div class="card stat"><div class="ic" style="background:#fde4e5;color:#e5484d"><svg class="i"><use href="#i-file"/></svg></div><div><b>6</b><span>Certificate download baki</span></div></div></div>
+ <div class="grid g2" style="margin-top:18px"><div class="card"><h3>Recent customers <a style="color:var(--blue);font-size:13px;font-weight:600">Sabhi dekho →</a></h3>
+ <table><tr><th>Naam</th><th>Seva</th><th>Status</th><th></th></tr>
+ <tr><td><div class="pn"><div class="av" style="background:#2563eb">AK</div>Anita Kumari</div></td><td>Jati Praman Patra</td><td><span class="tag ok">Approved</span></td><td class="act"><button class="l" onclick="toast('Profile load hua')">Load</button></td></tr>
+ <tr><td><div class="pn"><div class="av" style="background:#d97706">RS</div>Ramesh Singh</div></td><td>Aay Praman Patra</td><td><span class="tag wt">Pending</span></td><td class="act"><button class="l" onclick="toast('Profile load hua')">Load</button></td></tr>
+ <tr><td><div class="pn"><div class="av" style="background:#0d9488">PD</div>Pooja Devi</div></td><td>Niwas Praman Patra</td><td><span class="tag bl">Submitted</span></td><td class="act"><button class="l" onclick="toast('Profile load hua')">Load</button></td></tr>
+ <tr><td><div class="pn"><div class="av" style="background:#7c3aed">MY</div>Manoj Yadav</div></td><td>EWS Praman Patra</td><td><span class="tag er">Rejected</span></td><td class="act"><button class="l" onclick="toast('Profile load hua')">Load</button></td></tr></table></div>
+ <div class="card"><h3>Jaldi shuru karo</h3><div class="qa"><div onclick="go('form')" style="color:#d97706"><svg class="i"><use href="#i-edit"/></svg><br>Form bharo<small><kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>L</kbd></small></div><div onclick="go('ocr')" style="color:#0d9488"><svg class="i"><use href="#i-scan"/></svg><br>OCR scan<small>Document se data</small></div><div onclick="go('stat')" style="color:#2563eb"><svg class="i"><use href="#i-radar"/></svg><br>Status check<small>Sab application</small></div><div style="color:#7c3aed"><svg class="i"><use href="#i-down"/></svg><br>Certificate<small>Download</small></div></div>
+ <h3 style="margin-top:22px">Aaj ka progress</h3><div class="bar"><i style="width:68%"></i></div><p style="color:var(--mut);margin-top:8px;font-size:12px">34 / 50 target pura</p></div></div></section>
+
+<section class="page" id="prof"><div class="top"><div><h1>Profiles</h1><p>Sabhi customers ka data</p></div><input class="search" placeholder="Naam ya mobile…"><button class="btn"><svg class="i"><use href="#i-up"/></svg> Import</button><button class="btn p"><svg class="i"><use href="#i-plus"/></svg> Naya Profile</button></div>
+ <div class="card"><table><tr><th>#</th><th>Customer</th><th>Mobile</th><th>Jila</th><th>Jati</th><th>Documents</th><th></th></tr>
+ <tr><td>001</td><td><div class="pn"><div class="av" style="background:#2563eb">AK</div>Anita Kumari</div></td><td>98765 43210</td><td>Patna</td><td>EBC</td><td><span class="tag ok">4 / 4</span></td><td class="act"><button class="l" onclick="toast('Profile load hua')">Load</button><button>Edit</button><button><svg class="i"><use href="#i-trash"/></svg></button></td></tr>
+ <tr><td>002</td><td><div class="pn"><div class="av" style="background:#d97706">RS</div>Ramesh Singh</div></td><td>91234 56780</td><td>Gaya</td><td>General</td><td><span class="tag wt">2 / 4</span></td><td class="act"><button class="l" onclick="toast('Profile load hua')">Load</button><button>Edit</button><button><svg class="i"><use href="#i-trash"/></svg></button></td></tr>
+ <tr><td>003</td><td><div class="pn"><div class="av" style="background:#0d9488">PD</div>Pooja Devi</div></td><td>99887 76655</td><td>Nalanda</td><td>BC</td><td><span class="tag ok">4 / 4</span></td><td class="act"><button class="l" onclick="toast('Profile load hua')">Load</button><button>Edit</button><button><svg class="i"><use href="#i-trash"/></svg></button></td></tr></table></div></section>
+
+<section class="page" id="form"><div class="top"><div><h1>Form Fill</h1><p>Anita Kumari • Jati Praman Patra</p></div><button class="btn" onclick="toast('Profile save ho gaya')">Save</button><button class="btn p" onclick="toast('Portal form me data bhara ja raha hai…')"><svg class="i"><use href="#i-bolt"/></svg> Portal me bharo</button></div>
+ <div class="steps"><span class="d">✓ Profile</span><span class="c">2 Details</span><span>3 Documents</span><span>4 Portal</span></div>
+ <div class="fl"><div class="grid">
+ <div class="card"><h3>Vyaktigat jankari</h3><div class="fg"><div class="field"><label>नाम</label><input value="अनीता कुमारी"></div><div class="field"><label>पिता का नाम</label><input value="राजेश प्रसाद"></div><div class="field"><label>माता का नाम</label><input value="सुनीता देवी"></div><div class="field"><label>मोबाइल</label><input value="9876543210"></div><div class="field"><label>जन्म तिथि</label><input value="12/05/2001"></div><div class="field"><label>लिंग</label><div class="chips"><span>पुरुष</span><span class="on">महिला</span><span>अन्य</span></div></div></div></div>
+ <div class="card"><h3>Pata</h3><div class="fg"><div class="field"><label>जिला</label><select><option>पटना</option></select></div><div class="field"><label>अनुमंडल</label><select><option>पटना सदर</option></select></div><div class="field"><label>प्रखंड</label><select><option>फुलवारी</option></select></div><div class="field"><label>पंचायत / ग्राम</label><select><option>— चुनें —</option></select></div><div class="field"><label>पिन कोड</label><input value="801505"></div><div class="field"><label>पता प्रकार</label><div class="chips"><span class="on">ग्रामीण</span><span>शहरी</span></div></div></div></div>
+ <div class="card"><h3>Jati &amp; Aay</h3><div class="fg"><div class="field"><label>श्रेणी</label><select><option>अत्यंत पिछड़ा वर्ग</option></select></div><div class="field"><label>जाति</label><select><option>— चुनें —</option></select></div><div class="field"><label>उप-जाति</label><select><option>— चुनें —</option></select></div><div class="field"><label>कुल वार्षिक आय (₹)</label><input placeholder="जैसे 120000"></div><div class="field"><label>पेशा</label><select><option>— चुनें —</option></select></div><div class="field"><label>ईमेल</label><input placeholder="optional"></div></div></div>
+ </div>
+ <div class="card sum"><h3>Form ki taiyari</h3><div class="ring"><span>82%</span></div><p style="text-align:center;color:var(--mut);margin-bottom:12px">Portal me bharne se pehle ye bharo</p>
+ <div class="miss"><b></b>Jati chuno</div><div class="miss"><b></b>Upjati chuno</div><div class="miss"><b></b>Vaarshik aay likho</div><div class="miss"><b></b>Gram / Panchayat chuno</div>
+ <p class="hint" style="margin-top:14px"><svg class="i" style="width:14px;height:14px"><use href="#i-bolt"/></svg> <span>Shortcut: <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>L</kbd></span></p></div></div></section>
+
+<section class="page" id="ocr"><div class="top"><div><h1>OCR Documents</h1><p>Offline scan — data aapke PC se bahar nahi jata</p></div></div>
+ <div class="grid g2"><div class="card"><div class="drop"><big style="color:#d97706"><svg class="i" style="width:44px;height:44px"><use href="#i-up"/></svg></big><h3 style="justify-content:center;margin:10px 0 4px">Documents yahan chhodo</h3><p style="color:var(--mut)">Aadhaar, Ration card, Voter ID, purana praman patra • JPG / PNG / PDF</p><br><button class="btn n">File chuno</button></div>
+ <h3 style="margin:22px 0 6px">Nikala gaya data <span class="hint">Galat ho to seedha badal do</span></h3><table><tr><th></th><th>Field</th><th>Data</th><th>Document</th><th>Bharosa</th></tr>
+<tr><td><input type="checkbox" checked></td><td>Naam</td><td><input class="tbl-in" value="अनीता कुमारी"></td><td><span class="tag bl">Aadhaar</span></td><td><div class="cf"><div class="bar"><i style="width:98%"></i></div>98%</div></td></tr>
+<tr><td><input type="checkbox" checked></td><td>Pita ka naam</td><td><input class="tbl-in" value="राजेश प्रसाद"></td><td><span class="tag bl">Ration</span></td><td><div class="cf"><div class="bar"><i style="width:94%"></i></div>94%</div></td></tr>
+<tr><td><input type="checkbox" checked></td><td>PIN</td><td><input class="tbl-in" value="80100"></td><td><span class="tag bl">Aadhaar</span></td><td><div class="cf"><div class="bar w"><i style="width:61%"></i></div><span class="tag wt">Check</span></div></td></tr></table></div>
+ <div class="card"><h3>Uploaded</h3><div class="pn" style="margin-bottom:14px"><svg class="i" style="color:#2563eb"><use href="#i-file"/></svg> aadhaar.jpg <span class="tag ok" style="margin-left:auto">Done</span></div><div class="pn" style="margin-bottom:14px"><svg class="i" style="color:#2563eb"><use href="#i-file"/></svg> ration.pdf <span class="tag ok" style="margin-left:auto">Done</span></div><div class="pn"><svg class="i" style="color:#2563eb"><use href="#i-file"/></svg> voter.png <span class="tag wt" style="margin-left:auto">Scanning</span></div><br><button class="btn p" style="width:100%;justify-content:center" onclick="toast('3 fields form me apply hue')"><svg class="i"><use href="#i-check"/></svg> Form me apply karo</button></div></div></section>
+
+<section class="page" id="stat"><div class="top"><div><h1>Certificate Status</h1><p>Portal se live status</p></div><button class="btn n">Sabka status refresh</button></div>
+ <div class="filters"><span class="on">Sabhi 15</span><span>Pending 9</span><span>Approved 4</span><span>Rejected 2</span></div><div class="card"><table><tr><th>Customer</th><th>Application No.</th><th>Seva</th><th>Status</th><th></th></tr><tr><td>Anita Kumari</td><td>RTPS/2026/118842</td><td>Jati</td><td><span class="tag ok">Approved</span></td><td class="act"><button class="l"><svg class="i"><use href="#i-down"/></svg> Download</button></td></tr><tr><td>Ramesh Singh</td><td>RTPS/2026/118901</td><td>Aay</td><td><span class="tag wt">Pending</span></td><td></td></tr><tr><td>Manoj Yadav</td><td>RTPS/2026/118977</td><td>EWS</td><td><span class="tag er">Rejected</span></td><td class="act"><button>Karan dekho</button></td></tr></table></div></section>
+
+<section class="page" id="set"><div class="top"><div><h1>Backup &amp; Settings</h1></div></div>
+ <div class="grid g3"><div class="card"><h3>☁ Google Drive Backup</h3><p style="color:var(--mut);margin-bottom:14px">Last backup: aaj 10:42 AM</p><button class="btn n">Backup abhi lo</button></div><div class="card"><h3>💾 Local Backup</h3><p style="color:var(--mut);margin-bottom:14px">JSON file export / import</p><button class="btn">Export</button> <button class="btn">Import</button></div><div class="card"><h3>🎨 Rang</h3><p style="color:var(--mut);margin-bottom:14px">Accent chuno</p><span class="av" style="background:#f59e0b;display:inline-grid">&nbsp;</span> <span class="av" style="background:#0d9488;display:inline-grid">&nbsp;</span> <span class="av" style="background:#2563eb;display:inline-grid">&nbsp;</span></div></div></section>
+</main>
+<div class="toast" id="t"><svg class="i"><use href="#i-check"/></svg><span></span></div>
+<script>function go(p){document.querySelector('.nav[data-p='+p+']').click()}let tt;function toast(m){const t=document.getElementById('t');t.querySelector('span').textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2200)}document.querySelectorAll('.chips').forEach(c=>c.onclick=e=>{if(e.target.tagName=='SPAN'){c.querySelectorAll('span').forEach(x=>x.classList.remove('on'));e.target.classList.add('on')}});document.querySelectorAll('.filters').forEach(c=>c.onclick=e=>{if(e.target.tagName=='SPAN'){c.querySelectorAll('span').forEach(x=>x.classList.remove('on'));e.target.classList.add('on')}});document.querySelectorAll('.nav[data-p]').forEach(n=>n.onclick=()=>{document.querySelectorAll('.nav,.page').forEach(e=>e.classList.remove('on'));n.classList.add('on');document.getElementById(n.dataset.p).classList.add('on')})</script>
+</body></html>

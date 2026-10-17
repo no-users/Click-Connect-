@@ -1,0 +1,89 @@
+{
+  "manifest_version": 3,
+  "name": "Click & Continue",
+  "version": "3.1.0",
+  "description": "RTPS forms ko fast bharo: profile load, OCR, caste/sub-caste, status & certificate download",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAshr0WEidQSCSMFGAvrspNUCGGyCI1CITICahxn1LSk3VnnBSpMy0pTUyzcZct7+MW3kKMOApw+TkzEWqlagZ9wx5MYtzCfSxSJrqsvfT++yJNpR1DEczOj6Pryc84oOJkdU3yJuT+ZIuYUTpe/Z/VFdmIwUCUE7YTjPPkgJhsSYfPOABSqV0QczZXmp6t80DIl7E6hyNK3Lm2tCQqWDYNWw1xqekw2SR50wFkFB2h7GJSZw3AxTCHwS75TR6za+UxDNwb8pzNHHqLskU2SrUligd///mjuqqgWfiT7xr7C+88GTu6Gql5b8l5SvA1bLEU4avAKXilm6VxltglW//+wIDAQAB",
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "activeTab",
+    "scripting",
+    "downloads",
+    "identity",
+    "alarms"
+  ],
+  "host_permissions": [
+    "https://serviceonline.bihar.gov.in/*",
+    "https://swcs.bihar.gov.in/*",
+    "https://www.googleapis.com/*"
+  ],
+  "commands": {
+    "fill-active-profile": {
+      "suggested_key": { "default": "Ctrl+Shift+L" },
+      "description": "Active customer ka data current page me fill karo"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "scripts": ["driveSync.js", "certJob.js", "certStatusJob.js", "background.js"]
+  },
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://serviceonline.bihar.gov.in/*"],
+      "js": [
+  "casteData.js",
+  "subCasteData.js",
+  "content.js",
+  "nclFill.js",
+  "ewsFill.js"
+],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://serviceonline.bihar.gov.in/*"],
+      "js": ["docStore.js", "activeProfileBadge.js", "miniProfileSwitcher.js", "enclosureMatch.js", "enclosureAutoFill.js", "captchaAssist.js", "otpAutoValidate.js", "autoExportPdf.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://serviceonline.bihar.gov.in/*", "https://swcs.bihar.gov.in/*"],
+      "js": ["certJob.js", "certDownloadFill.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://serviceonline.bihar.gov.in/*"],
+      "js": ["certStatusJob.js", "certStatusFill.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://serviceonline.bihar.gov.in/*"],
+      "js": ["overrideConfirm.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "digital-saathi@example.com",
+      "strict_min_version": "109.0"
+    }
+  }
+}

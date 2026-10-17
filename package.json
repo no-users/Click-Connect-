@@ -1,0 +1,53 @@
+{
+  "name": "click-and-continue-desktop",
+  "productName": "Click & Continue",
+  "version": "1.0.0",
+  "description": "RTPS forms ko fast bharo - Desktop",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "dependencies": {
+    "electron-chrome-extensions": "^4.9.0"
+  },
+  "devDependencies": {
+    "electron": "^36.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "in.clickandcontinue.desktop",
+    "productName": "Click & Continue",
+    "files": [
+      "main.js",
+      "preload.js",
+      "shell/**",
+      "extension/**",
+      "build/**"
+    ],
+    "extraResources": [],
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "runAfterFinish": true,
+      "shortcutName": "Click & Continue",
+      "artifactName": "Click-and-Continue-Setup-${version}.exe"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+fire fox --     about:debugging#/runtime/this-firefox			target - manefest.json
+chrome -- 	chrome://extensions/					target - main folder
+edge browser -- edge://extensions/					target - main folder
+Backup Setup-   https://console.cloud.google.com/     steps  - drive api search and enable , 2nd - Credentials search and 							creat profile ,3rd - go audience and add test user gmail

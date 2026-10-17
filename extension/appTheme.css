@@ -1,0 +1,157 @@
+/* ============================================================
+   appTheme.css — look & feel for the WHOLE extension
+   Loaded last, so it refines (never replaces) the base styles:
+   no sizes that the fixed header / nav layout depends on are
+   changed — only colour, shape, depth, motion and dark-theme gaps.
+   ============================================================ */
+
+/* ---------- accent palettes (🎨 button) ---------- */
+html[data-accent="emerald"] body {
+  --accent-navy: #1f8a63; --accent-navy-2: #34b27f;
+  --accent-navy-gradient: linear-gradient(135deg, #3cc08c 0%, #1b7f5b 100%); --accent-glow: rgba(31, 138, 99, 0.18);
+}
+html[data-accent="violet"] body {
+  --accent-navy: #5b49c9; --accent-navy-2: #8a78ee;
+  --accent-navy-gradient: linear-gradient(135deg, #8c7bf0 0%, #5442c4 100%); --accent-glow: rgba(91, 73, 201, 0.18);
+}
+html[data-accent="sunset"] body {
+  --accent-navy: #d4631f; --accent-navy-2: #f08f4d;
+  --accent-navy-gradient: linear-gradient(135deg, #f59a56 0%, #cf5d1b 100%); --accent-glow: rgba(212, 99, 31, 0.18);
+}
+html[data-accent="rose"] body {
+  --accent-navy: #c93a62; --accent-navy-2: #ea6a8c;
+  --accent-navy-gradient: linear-gradient(135deg, #f0759a 0%, #bf3159 100%); --accent-glow: rgba(201, 58, 98, 0.18);
+}
+html[data-accent="emerald"] body.dark-theme { --accent-navy: #2c7a5e; --accent-navy-2: #43a07f; --accent-navy-gradient: linear-gradient(135deg, #2f8566 0%, #1d5a45 100%); --accent-glow: rgba(44, 122, 94, 0.35); }
+html[data-accent="violet"] body.dark-theme { --accent-navy: #5a4cab; --accent-navy-2: #7667c9; --accent-navy-gradient: linear-gradient(135deg, #6657bb 0%, #3f3584 100%); --accent-glow: rgba(90, 76, 171, 0.35); }
+html[data-accent="sunset"] body.dark-theme { --accent-navy: #b45a28; --accent-navy-2: #d77a42; --accent-navy-gradient: linear-gradient(135deg, #c4642f 0%, #86411c 100%); --accent-glow: rgba(180, 90, 40, 0.35); }
+html[data-accent="rose"] body.dark-theme { --accent-navy: #a53b5f; --accent-navy-2: #c75478; --accent-navy-gradient: linear-gradient(135deg, #b4456b 0%, #772846 100%); --accent-glow: rgba(165, 59, 95, 0.35); }
+
+/* the page behind the popup follows the theme too */
+html:has(body.dark-theme) { background: #0e1320; }
+
+/* ---------- top header: brand bar ---------- */
+h2 {
+  box-shadow: 0 6px 18px -8px rgba(20, 40, 90, 0.55);
+  background-image: linear-gradient(115deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 38%) !important;
+}
+.saathi-header-badge { background: rgba(255, 255, 255, 0.18) !important; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28); }
+.saathi-brand { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25); }
+
+/* ---------- tab bar: segmented pills with icons ---------- */
+.nav-bar { border-radius: 14px; padding: 5px; gap: 6px; }
+.nav-tabs-group { gap: 3px; background: var(--input-bg); padding: 3px; border-radius: 11px; border: 1px solid var(--border-color); }
+.tab-btn { border-radius: 9px; padding: 0 11px; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.tab-btn::before { font-size: 12px; line-height: 1; }
+#tab-form::before { content: "📝"; }
+#tab-saved::before { content: "👤"; }
+#tab-docs::before { content: "📄"; }
+#tab-certs::before { content: "📥"; }
+.tab-btn:not(.active):hover { color: var(--text-primary); background: var(--accent-glow); }
+.tab-btn.active { box-shadow: 0 6px 14px -6px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25); }
+
+.nav-actions-group { gap: 5px; align-items: stretch; }
+.theme-toggle-btn { font-size: 0 !important; width: 34px; padding: 0 !important; border-radius: 10px !important; }
+.theme-toggle-btn::before { content: "🌓"; font-size: 15px; }
+.icon-nav-btn {
+  width: 34px; padding: 0; border-radius: 10px; font-size: 14px; cursor: pointer; color: var(--text-primary);
+  background: var(--input-bg); border: 1px solid var(--border-color);
+  transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast), border-color var(--dur-fast);
+}
+.icon-nav-btn:hover, .theme-toggle-btn:hover { transform: translateY(-1px); background: var(--accent-glow); border-color: var(--accent-navy-2); }
+.add-record-btn { border-radius: 10px !important; box-shadow: var(--shadow-gold); }
+
+/* dark theme: the base styles left the tab labels unreadable */
+.dark-theme .nav-bar { background: var(--card-bg) !important; border-color: var(--border-color); }
+.dark-theme .nav-tabs-group { background: var(--bg-app-2); }
+.dark-theme .tab-btn { color: #aeb8cf; }
+.dark-theme .tab-btn.active { color: #fff; }
+.dark-theme .theme-toggle-btn, .dark-theme .icon-nav-btn { background: var(--bg-app-2); }
+.dark-theme h3 { background: var(--card-bg) !important; }
+
+/* ---------- form tab ---------- */
+.form-container { border-radius: 18px; scrollbar-width: thin; scrollbar-color: var(--accent-navy-2) transparent; }
+.form-group label { letter-spacing: 0.1px; }
+.form-group input[type="text"], .form-group input[type="email"], .form-group input[type="number"], .form-group input[type="tel"], .form-group input[type="date"], .form-group select, .form-group textarea {
+  border-radius: 10px;
+  transition: border-color var(--dur-fast) var(--ease-soft), box-shadow var(--dur-fast) var(--ease-soft), background var(--dur-fast);
+}
+.form-group input:hover:not(:focus), .form-group select:hover:not(:focus) { border-color: var(--accent-navy-2); }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent-navy-2) !important; box-shadow: 0 0 0 3px var(--accent-glow) !important; }
+
+/* ---------- buttons everywhere ---------- */
+.btn { border-radius: 11px; transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast), filter var(--dur-fast); }
+.btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.04); }
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn-primary { box-shadow: var(--shadow-gold); }
+
+/* sections / cards in Profile + Documents tabs */
+.saathi-tools-group, .saathi-cb-card, .saathi-dash-head { border-radius: 14px; }
+.saathi-tool-btn { border-radius: 11px; transition: transform var(--dur-fast) var(--ease-out), border-color var(--dur-fast), background var(--dur-fast); }
+.saathi-tool-btn:hover { transform: translateY(-1px); border-color: var(--accent-navy-2); }
+.doc-dropzone { border-radius: 16px; border-color: var(--accent-navy-2); background: var(--accent-glow); }
+.doc-dropzone:hover, .doc-dropzone-active { border-color: var(--accent-gold); }
+.doc-file-row { border-radius: 12px; border-left: 4px solid var(--accent-navy-2); }
+.doc-review-table { border-radius: 12px; overflow: hidden; }
+.doc-review-table th { background: var(--accent-navy-gradient); color: #fff; }
+
+/* toasts */
+.saathi-toast, #saathiToast { border-radius: 14px; box-shadow: var(--shadow-lift); }
+
+/* thin accent scrollbars everywhere (WebKit/Blink) */
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: var(--accent-navy-2); border-radius: 8px; opacity: 0.7; }
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* ---------- compact density ---------- */
+html[data-density="compact"] .form-container { gap: 8px 10px !important; padding: 12px; }
+html[data-density="compact"] .form-group label { font-size: 10.5px; }
+html[data-density="compact"] .form-group input, html[data-density="compact"] .form-group select { padding-top: 5px; padding-bottom: 5px; }
+html[data-density="compact"] .cd-card { padding: 9px 11px; }
+html[data-density="compact"] .cd-wrap { gap: 8px; }
+html[data-density="compact"] .cd-rec { padding: 7px; }
+html[data-density="compact"] .cd-hero { padding: 10px 14px; }
+
+/* ---------- 🎨 appearance popover ---------- */
+#appearancePop {
+  position: fixed; top: 104px; right: 16px; z-index: 2000; width: 262px; padding: 12px 13px 10px; box-sizing: border-box;
+  background: var(--card-bg); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 16px;
+  box-shadow: var(--shadow-lift); animation: saathiFadeDown var(--dur-base) var(--ease-out);
+}
+#appearancePop[hidden] { display: none; }
+.ap-title { font-size: 11px; font-weight: 800; margin: 2px 0 8px; }
+.ap-swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 12px; }
+.ap-swatch { border: 2px solid transparent; background: var(--input-bg); border-radius: 12px; padding: 7px 0 5px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 9px; font-weight: 700; color: var(--text-muted); }
+.ap-swatch::before { content: ""; width: 22px; height: 22px; border-radius: 50%; background: var(--sw); box-shadow: 0 3px 8px -2px var(--sw); }
+.ap-swatch.on { border-color: var(--sw); color: var(--text-primary); }
+.ap-row { display: flex; gap: 6px; }
+.ap-dens { flex: 1; border: 1.5px solid var(--border-color); background: var(--input-bg); color: var(--text-muted); border-radius: 10px; padding: 7px 4px; font-size: 11px; font-weight: 700; cursor: pointer; }
+.ap-dens.on { background: var(--accent-navy-gradient); color: #fff; border-color: transparent; }
+.ap-note { margin-top: 9px; font-size: 10px; color: var(--text-muted); }
+
+/* ---------- ⌘ quick-actions palette ---------- */
+#cmdkOverlay { position: fixed; inset: 0; z-index: 3000; display: flex; justify-content: center; align-items: flex-start; padding-top: 80px; background: rgba(10, 18, 40, 0.45); backdrop-filter: blur(3px); }
+#cmdkOverlay[hidden] { display: none; }
+.ck-box { width: 440px; max-width: 92%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; box-shadow: var(--shadow-lift); overflow: hidden; animation: saathiFadeDown var(--dur-base) var(--ease-out); }
+.ck-input { width: 100%; box-sizing: border-box; border: 0; border-bottom: 1px solid var(--border-color); padding: 14px 16px; font-size: 13.5px; background: transparent; color: var(--text-primary); outline: none; }
+.ck-list { max-height: 300px; overflow-y: auto; padding: 6px; }
+.ck-item { width: 100%; display: flex; align-items: center; gap: 10px; text-align: left; border: 0; background: transparent; color: var(--text-primary); padding: 9px 11px; border-radius: 10px; cursor: pointer; font-size: 12.5px; font-weight: 600; }
+.ck-item.on, .ck-item:hover { background: var(--accent-glow); box-shadow: inset 3px 0 0 var(--accent-navy-2); }
+.ck-ico { width: 22px; text-align: center; font-size: 15px; }
+.ck-empty { padding: 18px; text-align: center; color: var(--text-muted); font-size: 12px; }
+.ck-foot { display: flex; gap: 14px; justify-content: flex-end; padding: 7px 14px; border-top: 1px solid var(--border-color); font-size: 10px; color: var(--text-muted); }
+
+/* keep the whole nav row inside the bar (4 tabs + 3 icon buttons + Create Profile) */
+.tab-btn { padding: 0 9px; }
+.nav-bar { gap: 4px; }
+.icon-nav-btn, .theme-toggle-btn { width: 31px; }
+.add-record-btn { padding: 0 10px !important; }
+
+/* 5 tabs: icon for Doc Vault + a slimmer nav so "Profile" button stays inside the bar */
+#tab-vault::before { content: "🗂️"; }
+.nav-tabs-group { gap: 2px; }
+.tab-btn { padding: 0 7px; font-size: 11px; }
+.icon-nav-btn, .theme-toggle-btn { width: 28px; }
+.nav-actions-group { gap: 4px; }
+.add-record-btn { font-size: 0 !important; padding: 0 10px !important; }
+.add-record-btn::before { content: "＋ Profile"; font-size: 11px; font-weight: 800; }
